@@ -41,7 +41,10 @@
             <ComboBoxItem>In Progress</ComboBoxItem>
             <ComboBoxItem>Completed</ComboBoxItem>
         </ComboBox>
-        <Button x:Name="btnSubmitAndClose" Content="Submit and Close" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,300,0,0" Height="22" Click="btnSubmitAndClose_Click"/>
-        <Button x:Name="btnSubmitAndContinue" Content="Submit and Continue" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,327,0,0" Height="22" Click="btnSubmitAndContinue_Click"/>
+        
+        <Button x:Name="btnSubmitAndClose" Visibility="Hidden" Content="Submit and Close" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,300,0,0" Height="22" Click="btnSubmitAndClose_Click"/>
+        <Button x:Name="btnSubmitAndContinue" Visibility="Hidden" Content="Submit and Continue" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,327,0,0" Height="22" Click="btnSubmitAndContinue_Click"/>
+        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="83,300,0,0" VerticalAlignment="Top" Width="75" Click="btnSubmit_Click"/>
+
     </Grid>
 </Window>

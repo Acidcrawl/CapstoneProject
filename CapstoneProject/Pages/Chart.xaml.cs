@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections;
 using CapstoneProject.Models;
+using CapstoneProject.Controls;
 
 namespace CapstoneProject.Pages
 {
@@ -220,7 +221,7 @@ namespace CapstoneProject.Pages
 
         public void AddTask(Task task)
         {
-          
+            if (task == null) return;
             CalculationService cs = new CalculationService();
             Rect rectVal = cs.dateToChartCoordinate(Project.StartDate,task.StartedDate, task.MaxDuration);
             Grid taskGrid = new Grid();
@@ -236,9 +237,18 @@ namespace CapstoneProject.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            Canvas.SetTop(taskGrid, 30);
-            Canvas.SetLeft(taskGrid, rectVal.X);
-            mainCanvas.Children.Add(taskGrid);
+            //Canvas.SetTop(taskGrid, 30);
+            //Canvas.SetLeft(taskGrid, rectVal.X);
+            //mainCanvas.Children.Add(taskGrid);
+
+            TaskControl taskControl = new TaskControl(task);
+            taskControl.Width = rectVal.Width;
+            taskControl.Height = 50;
+
+            Canvas.SetTop(taskControl, 30);
+            Canvas.SetLeft(taskControl, rectVal.X);
+            mainCanvas.Children.Add(taskControl);
+
         }
 
         // Created by Sandro Pawlidis (9/25/2019)

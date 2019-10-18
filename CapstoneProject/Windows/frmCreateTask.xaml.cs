@@ -17,25 +17,64 @@ using CapstoneProject.Pages;
 using System.Globalization;
 using System.Data.SqlClient;
 
-namespace CapstoneProject
-{
+namespace CapstoneProject {
     /// <summary>
     /// Interaction logic for frmCreateTask.xaml
     /// </summary>
-    
+
     //By Levi Delezene
-    public partial class frmCreateTask : Window
-    {
+    public partial class frmCreateTask : Window {
         private Chart _chart;
-        public frmCreateTask(Chart chart)
-        {
+        private Task taskToEdit;
+
+        public frmCreateTask(Chart chart, Task task = null) {
             InitializeComponent();
             Owner = Application.Current.MainWindow;
             _chart = chart;
+            if (task != null) {
+                taskToEdit = task;
+            }
+        }
+
+        private bool validateInput() {
+            bool ret = true;
+
+            if (tbxTaskName.Text == null || tbxTaskName.Text == "") {
+                tbxTaskName.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+            if (tbxTaskDescription.Text == null || tbxTaskDescription.Text == "") {
+                tbxTaskDescription.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+            if (tbxMinDuration.Text == null || tbxMinDuration.Text == "") {
+                tbxMinDuration.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+            if (tbxMaxDuration.Text == null || tbxMaxDuration.Text == "") {
+                tbxMaxDuration.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+            if (cmbPriority.Text == null || cmbPriority.Text == "") {
+                cmbPriority.Background = Brushes.Red;
+                ret = false;
+            }
+            if (cmbOwner.SelectedIndex < 0) {
+                cmbOwner.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+            if (cmbStatus.Text == null || cmbStatus.Text == "") {
+                cmbStatus.BorderBrush = Brushes.Red;
+                ret = false;
+            }
+
+            return ret;
         }
 
         //By Levi Delezene
         private Task createTask() {
+            if (!validateInput()) return null;
+
             Task task = new Task {
                 Name = tbxTaskName.Text,
                 Project = _chart.Project,
@@ -46,6 +85,7 @@ namespace CapstoneProject
                 StartedDate = DateTime.Parse("1/5/2019"),
                 Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex]
             };
+
 
             //Maybe find a better way to do this
             switch (cmbStatus.Text) {
@@ -61,16 +101,71 @@ namespace CapstoneProject
             }
 
             new OTask().Insert(task);
-            
+
             return task;
         }
+
+        private Task editTask() {
+            if (!validateInput()) return null;
+
+            taskToEdit.Name = tbxTaskName.Text;
+            taskToEdit.Description = tbxTaskDescription.Text;
+            taskToEdit.MinDuration = float.Parse(tbxMinDuration.Text);
+            taskToEdit.MaxDuration = float.Parse(tbxMaxDuration.Text);
+            taskToEdit.Priority = int.Parse(cmbPriority.Text);
+            taskToEdit.Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex];
+
+            switch (cmbStatus.Text) {
+                case "Not Started":
+                    taskToEdit.Status = Status.notStarted;
+                    break;
+                case "In Progress":
+                    taskToEdit.Status = Status.inProgress;
+                    break;
+                case "Completed":
+                    taskToEdit.Status = Status.completed;
+                    break;
+            }
+
+            new OTask().Update(taskToEdit);
+
+            return taskToEdit;
+        }
+
+        private void btnSubmit_Click(object sender, RoutedEventArgs e) {
+            try {
+                Task task;
+                if (taskToEdit != null) {
+                    task = editTask();
+                } else {
+                    task = createTask();
+                }
+
+                _chart.Newtask = task;
+
+                if(task != null) {
+                    Close();
+                }
+
+            } catch (Exception excep) {
+                MessageBox.Show(excep.ToString());
+            }
+        }
+
+
 
         //By Levi Delezene
         private void btnSubmitAndClose_Click(object sender, RoutedEventArgs e) {
             try {
-                Task task = createTask();
+                Task task;
+                if (taskToEdit != null) {
+                    task = editTask();
+                } else {
+                    task = createTask();
+                }
+
                 _chart.Newtask = task;
-                
+
             } catch (Exception excep) {
                 MessageBox.Show(excep.ToString());
             } finally {
@@ -81,7 +176,12 @@ namespace CapstoneProject
         //By Levi Delezene
         private void btnSubmitAndContinue_Click(object sender, RoutedEventArgs e) {
             try {
-                createTask();
+                Task task;
+                if (taskToEdit != null) {
+                    task = editTask();
+                } else {
+                    task = createTask();
+                }
             } catch (Exception excep) {
                 MessageBox.Show(excep.ToString());
             } finally {
@@ -96,16 +196,16 @@ namespace CapstoneProject
             MainWindow.numberValidation(sender, e);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
             tbxTaskName.Focus();
             OUser user = new OUser();
             SqlDataReader sdr = user.Select();
-            while(sdr.Read())
-            {
+            while (sdr.Read()) {
                 User userValue = new User(sdr.GetInt32(0), sdr.GetString(1), sdr.GetString(2));
                 cmbOwner.Items.Add(userValue);
             }
         }
+
+        
     }
 }
