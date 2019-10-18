@@ -17,6 +17,7 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "insert into Dependency(TaskId) values('" + newDependency.Task.Id + "')'";
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskId", newDependency.Task.Id);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -36,6 +37,7 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "update Dependency set TaskId='" + updatedDependency.Task.Id + "' Where Id=" + updatedDependency.DepOnTaskId;
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskId", updatedDependency.Task.Id);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;

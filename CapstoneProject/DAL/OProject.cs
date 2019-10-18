@@ -21,6 +21,10 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "insert into User(Name, StartDate, WorkingHours, ProjectOwner) values('" + newProject.Name + "', '" + newProject.StartDate + "', '" + newProject.WorkingHours + "', '" + newProject.ProjectOwner + "')'";
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@name", newProject.Name);
+            cmd.Parameters.AddWithValue("@startDate",((object)newProject.StartDate) ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@workingHours",newProject.WorkingHours);
+            cmd.Parameters.AddWithValue("@projectOwner",newProject.ProjectOwner);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -39,6 +43,9 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "update Project set Name = '" + updatedProject.Name + "', WorkingHours='" + updatedProject.WorkingHours + "', ProjectOwner='" + updatedProject.ProjectOwner + "' Where ProjectId=" + updatedProject.Id;
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@name", updatedProject.Name);
+            cmd.Parameters.AddWithValue("@workingHours", updatedProject.WorkingHours);
+            cmd.Parameters.AddWithValue("@projectOwner", updatedProject.ProjectOwner);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;

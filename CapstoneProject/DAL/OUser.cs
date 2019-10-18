@@ -21,6 +21,9 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "insert into User(FirstName, MiddleName, LastName) values('" + newUser.FirstName + "', '" + newUser.MiddleName + "', '" + newUser.LastName + "')'";
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@firstName", newUser.FirstName);
+            cmd.Parameters.AddWithValue("@middleName", newUser.MiddleName);
+            cmd.Parameters.AddWithValue("@lastName", newUser.LastName);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -39,6 +42,7 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "Delete from User Where Id= "+id;
             SqlCommand cmd = new SqlCommand(query, conn);
+
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -48,6 +52,9 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "update User set FirstName = '"+updatedUser.FirstName+"', MiddleName='"+updatedUser.MiddleName+"', LastName='"+updatedUser.LastName+"' Where Id=" +updatedUser.Id;
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@firstName", updatedUser.FirstName);
+            cmd.Parameters.AddWithValue("@middleName", updatedUser.MiddleName);
+            cmd.Parameters.AddWithValue("@lastName", updatedUser.LastName);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
