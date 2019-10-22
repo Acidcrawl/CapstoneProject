@@ -1,5 +1,6 @@
 ﻿using CapstoneProject.Models;
 using CapstoneProject.Pages;
+using CapstoneProject.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace CapstoneProject
             project.StartDate = new DateTime(2019, 1, 1);
             project.Id = 1;
             frameMain.Content = chart;
+            new frmTest().ShowDialog();
         }
 
         //By Levi Delezene

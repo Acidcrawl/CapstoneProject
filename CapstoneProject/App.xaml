@@ -4,6 +4,59 @@
              xmlns:local="clr-namespace:CapstoneProject"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!--
+            Created by: Chris Neeser
+            Date: 10/20/2019
+        -->
+        <Style x:Key="AppToolTip"
+               TargetType="local:TaskToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:TaskToolTip">
+
+                        <GroupBox Header="Task Information" HorizontalAlignment="Left" Height="245" Margin="37,31,0,0" VerticalAlignment="Top" Width="332" Background="White">
+                            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                </Grid.RowDefinitions>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" Content="Name: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="2" Content="Description: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="3" Content="Min Duration: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="4" Content="Max Duration: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5" Content="Most Likely: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="6" Content="Priority: "></Label>
+                                <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="7" Content="Owner: "></Label>
+
+                                <Label Grid.Column="2" Grid.Row="1" Content="{Binding Task.Name, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="2" Content="{Binding Task.Description, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="3" Content="{Binding Task.MinDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="4" Content="{Binding Task.MaxDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="5" Content="{Binding Task.MostLikelyDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="6" Content="{Binding Task.Priority, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                <Label Grid.Column="2" Grid.Row="7" Content="{Binding Task.Owner, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                            </Grid>
+                        </GroupBox>
+                        <!--<StackPanel Background="Blue">
+                            <Label Content="{TemplateBinding Content}" FontWeight="Bold" Foreground="White"/>
+                            <Label Content="{Binding Task.Name, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" FontWeight="Bold" Foreground="White"/>
+                            <Label Content="{Binding Task.MostLikelyDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" FontWeight="Bold" Foreground="White"/>
+                        </StackPanel>-->
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>    
     </Application.Resources>
 </Application>
