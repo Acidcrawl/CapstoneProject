@@ -24,8 +24,8 @@ namespace CapstoneProject
     /// </summary>
     public partial class MainWindow : Window
     {
-        Project project;
-        Chart chart;
+        public Project project;
+        public Chart chart;
 
         public MainWindow()
         {
@@ -36,6 +36,8 @@ namespace CapstoneProject
             project.StartDate = new DateTime(2019, 1, 1);
             project.Id = 1;
             frameMain.Content = chart;
+
+
             new frmTest().ShowDialog();
         }
 

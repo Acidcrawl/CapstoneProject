@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections;
 using CapstoneProject.Models;
+using CapstoneProject.Controls;
 
 namespace CapstoneProject.Pages
 {
@@ -32,6 +33,8 @@ namespace CapstoneProject.Pages
         private Task newtask;
 
         private double dayWidth = Properties.Settings.Default.dayWidth;
+        int buttonSpacing = 50;
+        int buttonHeight = 25;
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
 
@@ -46,6 +49,118 @@ namespace CapstoneProject.Pages
             addItemsCombo();
 
             DrawCalendar(365);
+
+            Task main = new Task("Create Class", 1, 2);
+            Task sub1 = new Task("Implement Function", 3, 2);
+            Task sub2 = new Task("Consider Objects", 4, 3);
+
+            Task sub11 = new Task("Assume Positions", 6, 2);
+            Task sub21 = new Task("Detect Errors", 6, 3);
+            Task sub211 = new Task("Run Tests", 9, 2);
+            Task sub212 = new Task("Debug Code", 10, 3);
+            Task sub22 = new Task("Publish", 8, 2);
+
+            Task sub23 = new Task("Report Progress", 8, 2);
+            Task sub24 = new Task("Polish", 8, 4);
+            Task sub242 = new Task("Spacing", 14, 2);
+            Task sub241 = new Task("Comments", 12, 2);
+            Task sub231 = new Task("Upload Docs", 10, 4);
+            Task sub232 = new Task("Hold Meeting", 11, 2);
+
+
+            main.AddDependentTask(sub1);
+            main.AddDependentTask(sub2);
+            sub1.AddDependentTask(sub11);
+            sub2.AddDependentTask(sub22);
+            sub1.AddDependentTask(sub21);
+            sub1.AddDependentTask(sub22);
+            main.AddDependentTask(sub1);
+            sub2.AddDependentTask(sub23);
+            sub23.AddDependentTask(sub231);
+            sub23.AddDependentTask(sub232);
+            sub2.AddDependentTask(sub24);
+            sub24.AddDependentTask(sub241);
+            sub21.AddDependentTask(sub211);
+            sub21.AddDependentTask(sub212);
+
+            List<Task> tasks = new List<Task>();
+            tasks.Add(main);
+
+            DrawGraph(tasks);
+        }
+
+        // Created by Sandro Pawlidis (10/15/2019)
+        private void DrawGraph(List<Task> mainLevel) {
+            //TODO: Add support for multiple root nodes.
+            int i = DrawSubTasks(mainLevel[0], 50);
+        }
+
+        // Created by Sandro Pawlidis (10/15/2019)
+        private int DrawSubTasks(Task parent, double topMargin) {
+            double newTopMargin = topMargin;
+            double minWidth = int.MaxValue;
+
+            int subtaskCount = 0;
+            for (int i = 0; i < parent.DependentTasks.Count; i++) {
+                subtaskCount += DrawSubTasks(parent.DependentTasks[i], newTopMargin);
+
+                Point start = new Point(parent.Start * dayWidth + parent.MinDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
+                Point end = new Point(parent.DependentTasks[i].Start * dayWidth, newTopMargin + buttonHeight / 2);
+
+                double width = start.X + (end.X - start.X) / 2;
+                minWidth = (width < minWidth) ? width : minWidth;
+
+                Point midTop = new Point(minWidth, start.Y);
+                Point midBot = new Point(minWidth, end.Y);
+
+                List<Point> points = new List<Point>();
+                points.Add(start);
+                points.Add(midTop);
+                points.Add(midBot);
+                points.Add(end);
+
+                Path p = getPath(points);
+                mainCanvas.Children.Add(p);
+
+                newTopMargin = topMargin + (i + 1) * (buttonHeight + buttonSpacing);
+                newTopMargin += subtaskCount * (buttonHeight + buttonSpacing);
+            }
+
+            Button b = new Button();
+            b.Content = parent.Name;
+
+            Canvas.SetLeft(b, parent.Start * dayWidth);
+            Canvas.SetTop(b, topMargin);
+
+            b.Width = parent.MinDuration * dayWidth - dayWidth / 4;
+            b.Height = buttonHeight;
+
+            mainCanvas.Children.Add(b);
+            subtaskCount += (parent.DependentTasks.Count > 1) ? parent.DependentTasks.Count - 1 : 0;
+            //MessageBox.Show(subtaskCount.ToString());
+            return subtaskCount;
+        }
+
+        // Created by Sandro Pawlidis (10/15/2019)
+        private Path getPath(List<Point> points) {
+            Path path = new Path();
+            path.Stroke = Brushes.Black;
+            path.StrokeThickness = 1;
+
+            PathSegmentCollection segments = new PathSegmentCollection();
+            for (int i = 1; i < points.Count; i++)
+                segments.Add(new LineSegment(points[i], true));
+
+            path.Data = new PathGeometry() {
+                Figures = new PathFigureCollection() {
+                    new PathFigure() {
+                        StartPoint = points[0],
+                        Segments = segments
+                    }
+                }
+            };
+
+            return path;
         }
 
         public Task Newtask
@@ -84,7 +199,7 @@ namespace CapstoneProject.Pages
                 line.X2 = line.X1;
 
                 line.Y1 = 0;
-                line.Y2 = mainCanvas.ActualHeight; //Changed .Height to .ActualHeight to make use of auto width and height - Chase
+                line.Y2 = mainCanvas.Height; //Changed .Height to .ActualHeight to make use of auto width and height - Chase
 
                 mainCanvas.Children.Add(line);
 
@@ -106,7 +221,7 @@ namespace CapstoneProject.Pages
 
         public void AddTask(Task task)
         {
-          
+            if (task == null) return;
             CalculationService cs = new CalculationService();
             Rect rectVal = cs.dateToChartCoordinate(Project.StartDate,task.StartedDate, task.MaxDuration);
             Grid taskGrid = new Grid();
@@ -122,9 +237,18 @@ namespace CapstoneProject.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            Canvas.SetTop(taskGrid, 30);
-            Canvas.SetLeft(taskGrid, rectVal.X);
-            mainCanvas.Children.Add(taskGrid);
+            //Canvas.SetTop(taskGrid, 30);
+            //Canvas.SetLeft(taskGrid, rectVal.X);
+            //mainCanvas.Children.Add(taskGrid);
+
+            TaskControl taskControl = new TaskControl(task);
+            taskControl.Width = rectVal.Width;
+            taskControl.Height = 50;
+
+            Canvas.SetTop(taskControl, 30);
+            Canvas.SetLeft(taskControl, rectVal.X);
+            mainCanvas.Children.Add(taskControl);
+
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
@@ -218,8 +342,8 @@ namespace CapstoneProject.Pages
         //Added this to handle resizing of the calendar - Chase Torres (9/26/2019)
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            mainCanvas.Children.Clear();
-            DrawCalendar(365);
+            //mainCanvas.Children.Clear();
+            //DrawCalendar(365);
         }
 
         //Adds months to the combo box - Chase Torres (9/26/2019)

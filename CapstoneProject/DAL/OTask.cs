@@ -56,6 +56,16 @@ namespace CapstoneProject.DAL
             conn.Open();
             string query = "update Task set Name = '" + updatedTask.Name + "', Description='" + updatedTask.Description + "', MinEstDuration='" + updatedTask.MinDuration + "', MaxEstDuration='" + updatedTask.MaxDuration + "', MostLikelyeEstDuration='" + updatedTask.MostLikelyDuration + "', EndDate='" + updatedTask.CompletedDate + "', ModifiedDate='" + updatedTask.ModifiedDate + "', StatusId='" + updatedTask.Status + "', UserId='" + updatedTask.Owner.Id + "', ProjectId='" + updatedTask.Project.Id + "' Where TaskId=" + updatedTask.Id;
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@name", updatedTask.Name);
+            cmd.Parameters.AddWithValue("@description", updatedTask.Description);
+            cmd.Parameters.AddWithValue("@minduration", updatedTask.MinDuration);
+            cmd.Parameters.AddWithValue("@maxduration", updatedTask.MaxDuration);
+            cmd.Parameters.AddWithValue("@mostlikelyduration", updatedTask.MostLikelyDuration);
+            cmd.Parameters.AddWithValue("@completeddate", ((object)updatedTask.CompletedDate) ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@status", updatedTask.Status);
+            cmd.Parameters.AddWithValue("@ownerid", updatedTask.Owner.Id);
+            cmd.Parameters.AddWithValue("@projectid", updatedTask.Project.Id);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
