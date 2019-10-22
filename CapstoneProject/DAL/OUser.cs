@@ -66,7 +66,24 @@ namespace CapstoneProject.DAL
             string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\"";
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader reader = cmd.ExecuteReader();
+            conn.Close();
             return reader;
+        }
+
+        public User SelectSingleUser(int userId)
+        {
+            conn.Open();
+            string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\" where userid=@userid";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@userid", userId);
+            SqlDataReader reader = cmd.ExecuteReader();
+            User user = new User();
+            while (reader.Read())
+            {
+                user = new User((int)reader["UserId"], (string)reader["FirstName"], (string)reader["LastName"]);
+            }
+            conn.Close();
+            return user;
         }
     }
 }

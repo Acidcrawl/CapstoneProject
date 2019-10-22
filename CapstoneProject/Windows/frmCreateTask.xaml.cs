@@ -77,7 +77,7 @@ namespace CapstoneProject {
 
             Task task = new Task {
                 Name = tbxTaskName.Text,
-                Project = _chart.Project,
+                ProjectId = _chart.Project.Id,
                 Description = tbxTaskDescription.Text,
                 MinDuration = float.Parse(tbxMinDuration.Text),
                 MaxDuration = float.Parse(tbxMaxDuration.Text),

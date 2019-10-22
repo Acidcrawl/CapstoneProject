@@ -10,14 +10,19 @@ namespace CapstoneProject.DAL
 {
     public class ODependency
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=\pertchart\CapstoneProject\CapstoneProject\CapstoneProject\database\SmartPertDB.mdf;Integrated Security=True");
+        SqlConnection conn;
+
+        public ODependency()
+        {
+            conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\database\SmartPertDB.mdf;Integrated Security=True");
+        }
 
         public int Insert(Dependency newDependency)
         {
             conn.Open();
-            string query = "insert into Dependency(TaskId) values('" + newDependency.Task.Id + "')'";
+            string query = "insert into Dependency(TaskId) values('" + newDependency.TaskId + "')'";
             SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskId", newDependency.Task.Id);
+            cmd.Parameters.AddWithValue("@taskId", newDependency.TaskId);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -35,13 +40,32 @@ namespace CapstoneProject.DAL
         public int Update(Dependency updatedDependency)
         {
             conn.Open();
-            string query = "update Dependency set TaskId='" + updatedDependency.Task.Id + "' Where Id=" + updatedDependency.DepOnTaskId;
+            string query = "update Dependency set TaskId='" + updatedDependency.TaskId + "' Where Id=" + updatedDependency.DepOnTaskId;
             SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@taskId", updatedDependency.Task.Id);
+            cmd.Parameters.AddWithValue("@taskId", updatedDependency.TaskId);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
 
+        }
+
+        public List<Dependency> Select(int TaskId)
+        {
+            List<Dependency> dependencyList = new List<Dependency>();
+            conn.Open();
+            string query = "Select * from Dependency where DepOnTaskId = @taskid";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskid", TaskId);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Dependency dep = new Dependency();
+                dep.DepOnTaskId = (int)reader["DepOnTaskId"];
+                dep.TaskId = (int)reader["TaskId"];
+                dependencyList.Add(dep);
+            }
+            conn.Close();
+            return dependencyList;
         }
     }
 }

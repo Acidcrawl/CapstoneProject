@@ -15,7 +15,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="local:TaskToolTip">
 
-                        <GroupBox Header="Task Information" HorizontalAlignment="Left" Height="245" Margin="37,31,0,0" VerticalAlignment="Top" Width="332" Background="White">
+                        <GroupBox Header="Task Information" HorizontalAlignment="Left" Height="245" Margin="37,31,0,0" VerticalAlignment="Top" Width="500" Background="White">
                             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>

@@ -31,5 +31,10 @@ namespace CapstoneProject.Windows
             myButton.ToolTip = ttp;
             //myButton.ToolTip = "Suck it!";
         }
+
+        private void MyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

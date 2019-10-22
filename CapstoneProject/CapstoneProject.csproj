@@ -70,6 +70,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CalculationService.cs" />
+    <Compile Include="Controls\TaskControl.xaml.cs">
+      <DependentUpon>TaskControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DAL\ODependency.cs" />
     <Compile Include="DAL\OProject.cs" />
     <Compile Include="DAL\OTask.cs" />
@@ -96,9 +99,10 @@
     <Compile Include="Windows\frmTest.xaml.cs">
       <DependentUpon>frmTest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
+    <Page Include="Controls\TaskControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,10 +150,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Windows\frmTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

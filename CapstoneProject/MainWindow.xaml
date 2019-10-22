@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CapstoneProject"
         mc:Ignorable="d"
-        Title="PERT Chart" Height="450" Width="800" AutomationProperties.Name="winMain">
+        Title="PERT Chart" Height="450" Width="800" AutomationProperties.Name="winMain" WindowState="Maximized">
 
     <Grid>
         <Menu HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Margin="0">

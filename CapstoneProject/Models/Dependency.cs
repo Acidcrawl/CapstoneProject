@@ -12,6 +12,6 @@ namespace CapstoneProject.Models
     public class Dependency
     {
         public int DepOnTaskId { get; set; }
-        public Task Task { get; set; }
+        public int TaskId { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Collections;
 using CapstoneProject.Models;
 using CapstoneProject.Controls;
+using CapstoneProject.DAL;
 
 namespace CapstoneProject.Pages
 {
@@ -49,23 +50,23 @@ namespace CapstoneProject.Pages
             addItemsCombo();
 
             DrawCalendar(365);
+            /*
+            Task main = new Task("Create Class", 1, 2,true);
+            Task sub1 = new Task("Implement Function", 3, 2,false);
+            Task sub2 = new Task("Consider Objects", 4, 3, false);
 
-            Task main = new Task("Create Class", 1, 2);
-            Task sub1 = new Task("Implement Function", 3, 2);
-            Task sub2 = new Task("Consider Objects", 4, 3);
+            Task sub11 = new Task("Assume Positions", 6, 2, false);
+            Task sub21 = new Task("Detect Errors", 6, 3, false);
+            Task sub211 = new Task("Run Tests", 9, 2, false);
+            Task sub212 = new Task("Debug Code", 10, 3, false);
+            Task sub22 = new Task("Publish", 8, 2, false);
 
-            Task sub11 = new Task("Assume Positions", 6, 2);
-            Task sub21 = new Task("Detect Errors", 6, 3);
-            Task sub211 = new Task("Run Tests", 9, 2);
-            Task sub212 = new Task("Debug Code", 10, 3);
-            Task sub22 = new Task("Publish", 8, 2);
-
-            Task sub23 = new Task("Report Progress", 8, 2);
-            Task sub24 = new Task("Polish", 8, 4);
-            Task sub242 = new Task("Spacing", 14, 2);
-            Task sub241 = new Task("Comments", 12, 2);
-            Task sub231 = new Task("Upload Docs", 10, 4);
-            Task sub232 = new Task("Hold Meeting", 11, 2);
+            Task sub23 = new Task("Report Progress", 8, 2, false);
+            Task sub24 = new Task("Polish", 8, 4, false);
+            Task sub242 = new Task("Spacing", 14, 2, false);
+            Task sub241 = new Task("Comments", 12, 2, false);
+            Task sub231 = new Task("Upload Docs", 10, 4, false);
+            Task sub232 = new Task("Hold Meeting", 11, 2, false);
 
 
             main.AddDependentTask(sub1);
@@ -82,11 +83,40 @@ namespace CapstoneProject.Pages
             sub24.AddDependentTask(sub241);
             sub21.AddDependentTask(sub211);
             sub21.AddDependentTask(sub212);
+            */
+            //tasks.Add(main);
 
-            List<Task> tasks = new List<Task>();
-            tasks.Add(main);
 
-            DrawGraph(tasks);
+            List<Task> taskList = GetTasksAndDependanciesFromDatabase();
+            DrawGraph(taskList);
+        }
+
+        /// <summary>
+        /// Written By: Chris Neeser
+        /// Date: 10/22/2019
+        /// Populates all Tasks and Dependencies for Project from database
+        /// </summary>
+        /// <returns>List of Root Tasks</returns>
+        private List<Task> GetTasksAndDependanciesFromDatabase()
+        {
+            //Retreive Task List
+            OTask oTask = new OTask();
+            List<Task> tasks = oTask.Select(_project.Id);
+
+
+            //Loop through task list and add dependencies
+            ODependency oDependency = new ODependency();
+            foreach (Task task in tasks)
+            {
+                List<Dependency> dependencyList = oDependency.Select(task.Id);
+                foreach (Dependency dep in dependencyList)
+                {
+                    Task dependentTask = tasks.Single(s => s.Id == dep.TaskId);
+                    task.AddDependentTask(dependentTask);
+                }
+
+            }
+            return (tasks.Where(s => s.RootNode == true)).ToList();
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
@@ -103,9 +133,8 @@ namespace CapstoneProject.Pages
             int subtaskCount = 0;
             for (int i = 0; i < parent.DependentTasks.Count; i++) {
                 subtaskCount += DrawSubTasks(parent.DependentTasks[i], newTopMargin);
-
-                Point start = new Point(parent.Start * dayWidth + parent.MinDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
-                Point end = new Point(parent.DependentTasks[i].Start * dayWidth, newTopMargin + buttonHeight / 2);
+                Point start = new Point(((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth + parent.MinDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
+                Point end = new Point(((DateTime)parent.DependentTasks[i].StartedDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
 
                 double width = start.X + (end.X - start.X) / 2;
                 minWidth = (width < minWidth) ? width : minWidth;
@@ -128,8 +157,10 @@ namespace CapstoneProject.Pages
 
             Button b = new Button();
             b.Content = parent.Name;
+            
+            b.ToolTip = createToolTip(parent);
 
-            Canvas.SetLeft(b, parent.Start * dayWidth);
+            Canvas.SetLeft(b, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(b, topMargin);
 
             b.Width = parent.MinDuration * dayWidth - dayWidth / 4;
@@ -139,6 +170,21 @@ namespace CapstoneProject.Pages
             subtaskCount += (parent.DependentTasks.Count > 1) ? parent.DependentTasks.Count - 1 : 0;
             //MessageBox.Show(subtaskCount.ToString());
             return subtaskCount;
+        }
+
+        /// <summary>
+        /// Written By: Chris Neeser
+        /// Date: 10/22/2019
+        /// Create the tool tip for a task
+        /// </summary>
+        /// <param name="task">The task to create the tooltip for</param>
+        /// <returns>The tooltip to assign to your controls ToolTip property</returns>
+        private TaskToolTip createToolTip(Task task)
+        {
+            TaskToolTip ttp = new TaskToolTip();
+            ttp.Style = (Style)FindResource("AppToolTip");
+            ttp.Task = task;
+            return ttp;
         }
 
         // Created by Sandro Pawlidis (10/15/2019)

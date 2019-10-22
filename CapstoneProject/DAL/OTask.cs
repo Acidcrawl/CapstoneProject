@@ -7,6 +7,12 @@ using System.Data.SqlClient;
 using CapstoneProject.Models;
 using Task = CapstoneProject.Models.Task;
 
+
+/// <summary>
+/// Written By: Alankar
+/// Updated By: Chris Neeser
+/// Purpose: To provide a common access layer between the application business logic and the database.
+/// </summary>
 namespace CapstoneProject.DAL
 {
     public class OTask
@@ -25,7 +31,7 @@ namespace CapstoneProject.DAL
         public int Insert(Task newTask)
         {
             conn.Open();
-            string query = "insert into Task(Name, Description, MinEstDuration, MaxEstDuration, MostLikelyeEstDuration, StartDate, EndDate, ModifiedDate, StatusId, UserId, ProjectId) values(@name, @description, @minduration, @maxduration, @mostlikelyduration, @starteddate, @completeddate, @modifieddate, @status, @ownerid, @projectid)";
+            string query = "insert into Task(Name, Description, MinEstDuration, MaxEstDuration, MostLikelyeEstDuration, StartDate, EndDate, ModifiedDate, StatusId, UserId, ProjectId, RootNode) values(@name, @description, @minduration, @maxduration, @mostlikelyduration, @starteddate, @completeddate, @modifieddate, @status, @ownerid, @projectid, @rootnode)";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@name",newTask.Name);
             cmd.Parameters.AddWithValue("@description",newTask.Description);
@@ -37,7 +43,8 @@ namespace CapstoneProject.DAL
             cmd.Parameters.AddWithValue("@modifieddate",DateTime.Now);
             cmd.Parameters.AddWithValue("@status",newTask.Status);
             cmd.Parameters.AddWithValue("@ownerid",newTask.Owner.Id);
-            cmd.Parameters.AddWithValue("@projectid",newTask.Project.Id);
+            cmd.Parameters.AddWithValue("@projectid",newTask.ProjectId);
+            cmd.Parameters.AddWithValue("@rootnode", newTask.RootNode);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -54,7 +61,7 @@ namespace CapstoneProject.DAL
         public int Update(Task updatedTask)
         {
             conn.Open();
-            string query = "update Task set Name = '" + updatedTask.Name + "', Description='" + updatedTask.Description + "', MinEstDuration='" + updatedTask.MinDuration + "', MaxEstDuration='" + updatedTask.MaxDuration + "', MostLikelyeEstDuration='" + updatedTask.MostLikelyDuration + "', EndDate='" + updatedTask.CompletedDate + "', ModifiedDate='" + updatedTask.ModifiedDate + "', StatusId='" + updatedTask.Status + "', UserId='" + updatedTask.Owner.Id + "', ProjectId='" + updatedTask.Project.Id + "' Where TaskId=" + updatedTask.Id;
+            string query = "update Task set Name = @name, Description=@description, MinEstDuration=@minduration, MaxEstDuration=@maxduration, MostLikelyEstDuration=@mostlikelyduration, EndDate=@enddate, ModifiedDate=@modifieddate, StatusId=@status, UserId=@ownerid, ProjectId=@projectid, RootNode=@rootnode Where TaskId=@taskid";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@name", updatedTask.Name);
             cmd.Parameters.AddWithValue("@description", updatedTask.Description);
@@ -65,19 +72,45 @@ namespace CapstoneProject.DAL
             cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
             cmd.Parameters.AddWithValue("@status", updatedTask.Status);
             cmd.Parameters.AddWithValue("@ownerid", updatedTask.Owner.Id);
-            cmd.Parameters.AddWithValue("@projectid", updatedTask.Project.Id);
+            cmd.Parameters.AddWithValue("@projectid", updatedTask.ProjectId);
+            cmd.Parameters.AddWithValue("@rootnode",updatedTask.RootNode);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
 
         }
-        public SqlDataReader Select()
+        public List<Task> Select(int ProjectId)
         {
+            List<Task> taskList = new List<Task>();
             conn.Open();
-            string query = "Select * from Task";
+            string query = "Select * from Task where ProjectId = @projectid";
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@projectid", ProjectId);
             SqlDataReader reader = cmd.ExecuteReader();
-            return reader;
+            while(reader.Read())
+            {
+                Task task = new Task();
+                task.Id = (int)reader["TaskId"];
+                task.Name = (string)reader["Name"];
+                task.Description = (string)reader["description"];
+                task.MinDuration = (double)reader["MinEstDuration"];
+                task.MaxDuration = (double)reader["MaxEstDuration"];
+                task.MostLikelyDuration = (double)reader["MostLikelyEstDuration"];
+                if ((reader["StartDate"]) != DBNull.Value)
+                    task.StartedDate = (DateTime)reader["StartDate"];
+                if ((reader["EndDate"]) != DBNull.Value)
+                    task.CompletedDate = (DateTime)reader["EndDate"];
+                if ((reader["ModifiedDate"]) != DBNull.Value)
+                    task.ModifiedDate = (DateTime)reader["ModifiedDate"];
+                task.Status = (Status)reader["StatusId"];
+                OUser oUser = new OUser();
+                task.Owner = oUser.SelectSingleUser((int)reader["UserId"]);
+                task.ProjectId = (int)reader["ProjectId"];
+                task.RootNode = (Boolean)reader["RootNode"];
+                taskList.Add(task);
+            }
+            conn.Close();
+            return taskList;
         }
     }
 }

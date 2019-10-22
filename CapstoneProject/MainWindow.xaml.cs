@@ -31,14 +31,10 @@ namespace CapstoneProject
         {
             InitializeComponent();
             project = new Project();
-            chart = new Chart(project);
-
             project.StartDate = new DateTime(2019, 1, 1);
             project.Id = 1;
+            chart = new Chart(project);
             frameMain.Content = chart;
-
-
-            new frmTest().ShowDialog();
         }
 
         //By Levi Delezene

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="test" Height="450" Width="800">
     <Grid>
-        <Button Name="myButton" Content="Button" Margin="208,106,339,234">
+        <Button Name="myButton" Content="Button" Margin="208,106,339,234" Click="MyButton_Click">
             <Button.ToolTip>
                 <capstoneproject:TaskToolTip Style="{DynamicResource AppToolTip}" Header="Hello" Content="World"/>
             </Button.ToolTip>

@@ -22,40 +22,40 @@ namespace CapstoneProject.Models
 
         public Task()
         {
-            CompletedDate = null;
-            StartedDate = null;
+            this.DependentTasks = new List<Task>();
         }
 
-        public Task(string newName, int newStart, int newDuration) {
+        public Task(string newName, DateTime newStart, int newDuration, Boolean newRootNode) {
             this.Name = newName;
-            this.Start = newStart;
+            this.StartedDate = newStart;
             this.MinDuration = newDuration;
             this.DependentTasks = new List<Task>();
+            this.RootNode = newRootNode;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public float MinDuration { get; set; }
-        public float MaxDuration { get; set; }
-        public float MostLikelyDuration { get; set; }
+        public double MinDuration { get; set; }
+        public double MaxDuration { get; set; }
+        public double MostLikelyDuration { get; set; }
         public int Priority { get; set; }
         public Nullable<DateTime> CompletedDate { get; set; }
         public Nullable<DateTime> StartedDate { get; set; }
-        public int Start { get; set; } // TODO: Use actual dateTime for calculations.
         public DateTime DeletedDate { get; set; }
+        public Boolean RootNode { get; set; }
 
         public void AddDependentTask(Task t) {
             this.DependentTasks.Add(t);
         }
 
         //modified date created by alankar pokhrel
-        public DateTime ModifiedDate { get; set; }
+        public Nullable<DateTime> ModifiedDate { get; set; }
 
         public List<Task> DependentTasks { get; set; }
         public User Owner { get; set; }
         public Status Status { get; set; }
-        public Project Project { get; set; }
+        public int ProjectId { get; set; }
     }
 }
 
