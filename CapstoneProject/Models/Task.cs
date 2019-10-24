@@ -4,6 +4,7 @@
  
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,9 @@ namespace CapstoneProject.Models
 {
     public enum Status
     {
-        notStarted, inProgress, completed
+        Not_Started = 0,
+        In_Progress,
+        Completed
     }
 
     public class Task
@@ -40,8 +43,8 @@ namespace CapstoneProject.Models
         public double MaxDuration { get; set; }
         public double MostLikelyDuration { get; set; }
         public int Priority { get; set; }
-        public Nullable<DateTime> CompletedDate { get; set; }
-        public Nullable<DateTime> StartedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
+        public DateTime? StartedDate { get; set; }
         public DateTime DeletedDate { get; set; }
         public Boolean RootNode { get; set; }
 
@@ -50,7 +53,7 @@ namespace CapstoneProject.Models
         }
 
         //modified date created by alankar pokhrel
-        public Nullable<DateTime> ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         public List<Task> DependentTasks { get; set; }
         public User Owner { get; set; }

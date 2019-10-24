@@ -60,14 +60,38 @@ namespace CapstoneProject.DAL
             return effectedIds;
 
         }
-        public SqlDataReader Select()
-        {
+        //public SqlDataReader Select()
+        //{
+        //    conn.Open();
+        //    string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\"";
+        //    SqlCommand cmd = new SqlCommand(query, conn);
+        //    SqlDataReader reader = cmd.ExecuteReader();
+        //    conn.Close();
+        //    return reader;
+        //}
+
+        /// <summary>
+        /// Selects all users
+        /// -Levi Delezene
+        /// </summary>
+        /// <returns></returns>
+        public List<User> Select() {
+            List<User> users = new List<User>();
             conn.Open();
-            string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\"";
+            string query = "Select * from \"User\"";
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read()) {
+                User user = new User();
+                user.Id= (int)reader["UserId"];
+                user.FirstName = (string)reader["FirstName"];
+                user.LastName = (string)reader["LastName"];
+                //TODO user.MiddleName = (string)reader["MiddleName];
+                users.Add(user);
+            }
             conn.Close();
-            return reader;
+
+            return users;
         }
 
         public User SelectSingleUser(int userId)
