@@ -198,10 +198,11 @@ namespace CapstoneProject {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             tbxTaskName.Focus();
-            OUser user = new OUser();
-            SqlDataReader sdr = user.Select();
-            while (sdr.Read()) {
-                User userValue = new User(sdr.GetInt32(0), sdr.GetString(1), sdr.GetString(2));
+            OUser userDAL = new OUser();
+            List<User> userList = userDAL.Select();
+            foreach (User user in userList)
+            {
+                User userValue = new User(user.Id, user.FirstName, user.LastName);
                 cmbOwner.Items.Add(userValue);
             }
         }

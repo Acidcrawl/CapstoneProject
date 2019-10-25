@@ -30,11 +30,8 @@ namespace CapstoneProject
         public MainWindow()
         {
             InitializeComponent();
-            project = new Project();
-            project.StartDate = new DateTime(2019, 1, 1);
-            project.Id = 1;
-            chart = new Chart(project);
-            frameMain.Content = chart;
+            IntroPage introPage = new IntroPage(this);
+            frameMain.Content = introPage;
         }
 
         //By Levi Delezene
@@ -53,7 +50,7 @@ namespace CapstoneProject
         //By Levi Delezene
         private void mi_projectProperties_Click(object sender, RoutedEventArgs e)
         {
-            frameMain.Content = new ProjectProperties();
+            frameMain.Content = new ProjectProperties(ProjectProperties.Mode.UPDATE);
         }
 
         //By Levi Delezene

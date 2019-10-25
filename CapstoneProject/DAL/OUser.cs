@@ -15,7 +15,10 @@ namespace CapstoneProject.DAL
     public class OUser
     {
         SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\database\SmartPertDB.mdf;Integrated Security=True");
-
+        public OUser()
+        {
+            conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\database\SmartPertDB.mdf;Integrated Security=True");
+        }
         public int Insert(User newUser)
         {
             conn.Open();
@@ -60,14 +63,23 @@ namespace CapstoneProject.DAL
             return effectedIds;
 
         }
-        public SqlDataReader Select()
+        public List<User> Select()
         {
             conn.Open();
             string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\"";
             SqlCommand cmd = new SqlCommand(query, conn);
             SqlDataReader reader = cmd.ExecuteReader();
+            List<User> userList = new List<User>();
+            while (reader.Read())
+            {
+                User user = new User();
+                user.Id = (int) reader["UserId"];
+                user.FirstName = (string)reader["FirstName"];
+                user.LastName = (string)reader["LastName"];
+                userList.Add(user);
+            }
             conn.Close();
-            return reader;
+            return userList;
         }
 
         public User SelectSingleUser(int userId)

@@ -7,22 +7,24 @@
       xmlns:local="clr-namespace:CapstoneProject.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProjectProperties">
+      Title="Project Properties" Height="389.773" Width="654.545">
 
-    <Grid>
-        <Label Content="Project Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxName" HorizontalAlignment="Left" Height="23" Margin="105,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+    <Grid Loaded="Grid_Loaded">
+        <Label Content="Project Name" HorizontalAlignment="Left" Margin="135,53,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxName" HorizontalAlignment="Left" Height="23" Margin="231,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277"/>
 
-        <Label Content="Description" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxDescription" HorizontalAlignment="Left" Height="90" Margin="105,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Description" HorizontalAlignment="Left" Margin="147,84,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxDescription" HorizontalAlignment="Left" Height="90" Margin="231,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277"/>
 
-        <Label Content="Start Date" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Width="82"/>
-        <DatePicker x:Name="dpStartDate" HorizontalAlignment="Left" Margin="105,138,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Start Date" HorizontalAlignment="Left" Margin="154,183,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.012,0.516"/>
+        <DatePicker x:Name="dpStartDate" HorizontalAlignment="Left" Margin="231,184,0,0" VerticalAlignment="Top" Width="277"/>
 
-        <Label Content="Working Hours" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxWorkingHours" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="105,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Working Hours" HorizontalAlignment="Left" Margin="127,214,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxWorkingHours" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="231,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277"/>
 
-        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="105,209,0,0" VerticalAlignment="Top" Width="120" Click="btnSubmit_Click"/>
+        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="231,311,0,0" VerticalAlignment="Top" Width="277" Click="btnSubmit_Click"/>
+        <ComboBox x:Name="cboOwner" HorizontalAlignment="Left" Margin="231,256,0,0" VerticalAlignment="Top" Width="277"/>
+        <Label Content="Owner" HorizontalAlignment="Left" Margin="172,252,0,0" VerticalAlignment="Top"/>
 
 
     </Grid>

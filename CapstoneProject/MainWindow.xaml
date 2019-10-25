@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CapstoneProject"
         mc:Ignorable="d"
-        Title="PERT Chart" Height="450" Width="800" AutomationProperties.Name="winMain" WindowState="Maximized">
+        Title="PERT Chart" Height="450" Width="800" AutomationProperties.Name="winMain" WindowState="Normal">
 
     <Grid>
-        <Menu HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="515*"/>
+            <ColumnDefinition Width="277*"/>
+        </Grid.ColumnDefinitions>
+        <Menu HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Margin="0" Grid.ColumnSpan="2">
             <MenuItem Header="File" Height="20" Width="auto">
                 <MenuItem x:Name="mi_newProject" Header="New Project" Height="20" HorizontalAlignment="Left" Width="auto"/>
                 <MenuItem x:Name="mi_openProject" Header="Open Project" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_openProject_Click"/>
@@ -31,12 +35,12 @@
             <MenuItem x:Name="mi_help" Header="Help" Height="20" Width="auto"/>
         </Menu>
 
-        <Canvas x:Name="secCanvas" Margin="10,20,10,10" Width="800" Height="400">
-            
+        <Canvas x:Name="secCanvas" Margin="10,20,-18,-1" Width="800" Height="400" Grid.ColumnSpan="2">
+
         </Canvas>
 
 
-        <Frame x:Name="frameMain" Margin="0,20,0,0" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="frameMain" Margin="0,20,0,0" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

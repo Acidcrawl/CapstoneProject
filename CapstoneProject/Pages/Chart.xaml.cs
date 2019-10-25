@@ -88,7 +88,9 @@ namespace CapstoneProject.Pages
 
 
             List<Task> taskList = GetTasksAndDependanciesFromDatabase();
-            DrawGraph(taskList);
+
+            if(taskList.Count > 0)
+                DrawGraph(taskList);
         }
 
         /// <summary>

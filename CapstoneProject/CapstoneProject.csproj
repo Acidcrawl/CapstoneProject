@@ -81,15 +81,15 @@
     <Compile Include="Pages\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\IntroPage.xaml.cs">
+      <DependentUpon>IntroPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProjectProperties.xaml.cs">
       <DependentUpon>ProjectProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="Windows\frmDescription.xaml.cs">
       <DependentUpon>frmDescription.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\frmProjectProperties.xaml.cs">
-      <DependentUpon>frmProjectProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="GraphController.cs" />
     <Compile Include="Models\Node.cs" />
@@ -104,6 +104,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\Chart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\IntroPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,10 +128,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\frmPERTChart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\frmProjectProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
