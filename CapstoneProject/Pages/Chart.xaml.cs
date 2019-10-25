@@ -159,6 +159,7 @@ namespace CapstoneProject.Pages
 
             //taskcontrol
             TaskControl t = new TaskControl(parent);
+            t.ToolTip = createToolTip(parent);
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
             t.Width = parent.MinDuration * dayWidth - dayWidth / 4;

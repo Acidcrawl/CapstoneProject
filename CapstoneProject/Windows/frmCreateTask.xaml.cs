@@ -210,11 +210,7 @@ namespace CapstoneProject {
             tbxTaskName.Focus();
             OUser userDAL = new OUser();
             List<User> userList = userDAL.Select();
-            foreach (User user in userList)
-            {
-                User userValue = new User(user.Id, user.FirstName, user.LastName);
-                cmbOwner.Items.Add(userValue);
-            }
+            cmbOwner.ItemsSource = userList;
         }
 
         

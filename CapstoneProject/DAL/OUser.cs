@@ -64,6 +64,7 @@ namespace CapstoneProject.DAL
 
         }
         public List<User> Select()
+        { 
             conn.Open();
             string query = "Select UserId, FirstName, LastName, EmailAddress from \"User\"";
             SqlCommand cmd = new SqlCommand(query, conn);
