@@ -157,18 +157,23 @@ namespace CapstoneProject.Pages
                 newTopMargin += subtaskCount * (buttonHeight + buttonSpacing);
             }
 
-            Button b = new Button();
-            b.Content = parent.Name;
-            
-            b.ToolTip = createToolTip(parent);
+            //taskcontrol
+            TaskControl t = new TaskControl(parent);
+            Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
+            Canvas.SetTop(t, topMargin);
+            t.Width = parent.MinDuration * dayWidth - dayWidth / 4;
+            mainCanvas.Children.Add(t);
 
-            Canvas.SetLeft(b, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
-            Canvas.SetTop(b, topMargin);
+            //button
+            //Button b = new Button();
+            //b.Content = parent.Name;
+            //b.ToolTip = createToolTip(parent);
+            //Canvas.SetLeft(b, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
+            //Canvas.SetTop(b, topMargin);
+            //b.Width = parent.MinDuration * dayWidth - dayWidth / 4;
+            //b.Height = buttonHeight;
+            //mainCanvas.Children.Add(b);
 
-            b.Width = parent.MinDuration * dayWidth - dayWidth / 4;
-            b.Height = buttonHeight;
-
-            mainCanvas.Children.Add(b);
             subtaskCount += (parent.DependentTasks.Count > 1) ? parent.DependentTasks.Count - 1 : 0;
             //MessageBox.Show(subtaskCount.ToString());
             return subtaskCount;

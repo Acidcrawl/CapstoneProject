@@ -8,8 +8,8 @@
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid Background="Gray">
         <TextBlock x:Name="tbxTaskId" Text="{Binding Id}" Visibility="Hidden"></TextBlock><!--Make this use the name-->
-        <TextBlock Grid.Row="0" Text="{Binding Name}"></TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding Description}"></TextBlock>
+        <TextBlock x:Name="tbxTaskName" Grid.Row="0" Text="{Binding Name}"></TextBlock>
+        <TextBlock x:Name="tbsTaskDesc" Grid.Row="1" Text="{Binding Description}"></TextBlock>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>

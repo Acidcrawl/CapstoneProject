@@ -29,12 +29,22 @@ namespace CapstoneProject {
 
         public frmCreateTask(Chart chart, Task task = null) {
             InitializeComponent();
+            DataContext = this;
             Owner = Application.Current.MainWindow;
             _chart = chart;
             if (task != null) {
                 taskToEdit = task;
+                tbxTaskName.Text = taskToEdit.Name;
+                tbxTaskDescription.Text = taskToEdit.Description;
+                tbxMaxDuration.Text = taskToEdit.MaxDuration.ToString();
+                tbxMinDuration.Text = taskToEdit.MinDuration.ToString();
+                cmbPriority.SelectedValue = taskToEdit.Priority;
             }
         }
+
+        public List<User> Users { get; } = new OUser().Select();
+        public List<Status> Statuses { get; } = new List<Status> { Status.Completed, Status.In_Progress, Status.Not_Started};
+        public List<int> Priorities { get; } = new List<int> { 1,2,3,4,5};
 
         private bool validateInput() {
             bool ret = true;
@@ -90,13 +100,13 @@ namespace CapstoneProject {
             //Maybe find a better way to do this
             switch (cmbStatus.Text) {
                 case "Not Started":
-                    task.Status = Status.notStarted;
+                    task.Status = Status.Not_Started;
                     break;
                 case "In Progress":
-                    task.Status = Status.inProgress;
+                    task.Status = Status.In_Progress;
                     break;
                 case "Completed":
-                    task.Status = Status.completed;
+                    task.Status = Status.Completed;
                     break;
             }
 
@@ -117,13 +127,13 @@ namespace CapstoneProject {
 
             switch (cmbStatus.Text) {
                 case "Not Started":
-                    taskToEdit.Status = Status.notStarted;
+                    taskToEdit.Status = Status.Not_Started;
                     break;
                 case "In Progress":
-                    taskToEdit.Status = Status.inProgress;
+                    taskToEdit.Status = Status.In_Progress;
                     break;
                 case "Completed":
-                    taskToEdit.Status = Status.completed;
+                    taskToEdit.Status = Status.Completed;
                     break;
             }
 

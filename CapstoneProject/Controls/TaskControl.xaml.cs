@@ -27,8 +27,8 @@ namespace CapstoneProject.Controls {
         }
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {
-            Console.Out.WriteLine(tbxTaskId.Text);
-            //new frmCreateTask(null, OTask.get(tbxTaskId.Text));
+            Task task = (Task)((MenuItem)sender).DataContext;
+            new frmCreateTask(null, new OTask().Get(task.Id)).ShowDialog();
         }
     }
 }
