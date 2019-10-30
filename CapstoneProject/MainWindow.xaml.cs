@@ -50,7 +50,7 @@ namespace CapstoneProject
         //By Levi Delezene
         private void mi_projectProperties_Click(object sender, RoutedEventArgs e)
         {
-            frameMain.Content = new ProjectProperties(ProjectProperties.Mode.UPDATE);
+            frameMain.Content = new ProjectProperties(ProjectProperties.Mode.UPDATE, project);
         }
 
         //By Levi Delezene

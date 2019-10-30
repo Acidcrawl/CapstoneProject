@@ -31,23 +31,25 @@ namespace CapstoneProject.Pages
 
         private void CmdOpen_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Chart((Project)cboProject.Items[cboProject.SelectedIndex]));
-            parent.WindowState = WindowState.Maximized;
+            if (cboProject.SelectedIndex != -1)
+            {
+                parent.project = (Project)cboProject.Items[cboProject.SelectedIndex];
+                NavigationService.Navigate(new Chart((Project)cboProject.Items[cboProject.SelectedIndex]));
+                parent.mi_saveProject.IsEnabled = true;
+                parent.mi_projectProperties.IsEnabled = true;
+            }
         }
 
         private void CmdNew_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ProjectProperties(ProjectProperties.Mode.INSERT));
+            NavigationService.Navigate(new ProjectProperties(ProjectProperties.Mode.INSERT, new Project()));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             OProject projectDAL = new OProject();
             List<Project> projectList = projectDAL.Select();
-            foreach (Project project in projectList)
-            {
-                cboProject.Items.Add(project);
-            }
+            cboProject.ItemsSource = projectList;
         }
     }
 }

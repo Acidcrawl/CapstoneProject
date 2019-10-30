@@ -44,53 +44,9 @@ namespace CapstoneProject.Pages
 
             Project = project;
             this.PreviewMouseWheel += ZoomCanvas;
-            SetupCanvas();
 
             addItemsHashTable();
             addItemsCombo();
-
-            DrawCalendar(365);
-            /*
-            Task main = new Task("Create Class", 1, 2,true);
-            Task sub1 = new Task("Implement Function", 3, 2,false);
-            Task sub2 = new Task("Consider Objects", 4, 3, false);
-
-            Task sub11 = new Task("Assume Positions", 6, 2, false);
-            Task sub21 = new Task("Detect Errors", 6, 3, false);
-            Task sub211 = new Task("Run Tests", 9, 2, false);
-            Task sub212 = new Task("Debug Code", 10, 3, false);
-            Task sub22 = new Task("Publish", 8, 2, false);
-
-            Task sub23 = new Task("Report Progress", 8, 2, false);
-            Task sub24 = new Task("Polish", 8, 4, false);
-            Task sub242 = new Task("Spacing", 14, 2, false);
-            Task sub241 = new Task("Comments", 12, 2, false);
-            Task sub231 = new Task("Upload Docs", 10, 4, false);
-            Task sub232 = new Task("Hold Meeting", 11, 2, false);
-
-
-            main.AddDependentTask(sub1);
-            main.AddDependentTask(sub2);
-            sub1.AddDependentTask(sub11);
-            sub2.AddDependentTask(sub22);
-            sub1.AddDependentTask(sub21);
-            sub1.AddDependentTask(sub22);
-            main.AddDependentTask(sub1);
-            sub2.AddDependentTask(sub23);
-            sub23.AddDependentTask(sub231);
-            sub23.AddDependentTask(sub232);
-            sub2.AddDependentTask(sub24);
-            sub24.AddDependentTask(sub241);
-            sub21.AddDependentTask(sub211);
-            sub21.AddDependentTask(sub212);
-            */
-            //tasks.Add(main);
-
-
-            List<Task> taskList = GetTasksAndDependanciesFromDatabase();
-
-            if(taskList.Count > 0)
-                DrawGraph(taskList);
         }
 
         /// <summary>
@@ -241,6 +197,8 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (9/25/2019)
         private void DrawCalendar(int days)
         {
+            mainCanvas.Children.Clear();
+
             int lblCurrentDay = 1;
             int dicIndex = 0;
             for (int i = 0; i < days; i++)
@@ -446,6 +404,20 @@ namespace CapstoneProject.Pages
         {
             GroupBox taskGroup = new GroupBox();
             
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window.GetWindow(this).WindowState = WindowState.Maximized;
+
+            SetupCanvas();
+
+            DrawCalendar(365);
+
+            List<Task> taskList = GetTasksAndDependanciesFromDatabase();
+
+            if (taskList.Count > 0)
+                DrawGraph(taskList);
         }
     }
 }
