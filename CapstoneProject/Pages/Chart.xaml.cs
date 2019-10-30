@@ -263,8 +263,16 @@ namespace CapstoneProject.Pages
                     lblCurrentDay = 1;
                     dicIndex++;
                 }
-                lbDay.Content = lblCurrentDay;
+                if (lblCurrentDay == 1)
+                {
+                    
+                    lbDay.Content = dayMonths.Keys.ElementAt(dicIndex)+"\r\n"+lblCurrentDay;
+                }
+                else
+                {
 
+                    lbDay.Content = "\r\n"+lblCurrentDay;
+                }
                 lblCurrentDay++;
 
                 Canvas.SetLeft(lbDay, line.X1);
