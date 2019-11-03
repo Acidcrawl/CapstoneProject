@@ -72,5 +72,10 @@ namespace CapstoneProject
             this.Close();
             window.ShowDialog();
         }
+
+        private void mi_showMin_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

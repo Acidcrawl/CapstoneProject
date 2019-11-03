@@ -28,7 +28,7 @@
                 <MenuItem x:Name="mi_deleteTask" Header="Delete Task" HorizontalAlignment="Left" Height="20" Width="auto"/>
             </MenuItem>-->
             <MenuItem Header="View" Height="20" Width="auto">
-                <MenuItem x:Name="mi_showMin" Header="Show Min. Estimates" HorizontalAlignment="Left" Height="20" Width="auto"/>
+                <MenuItem x:Name="mi_showMin" Header="Show Min. Estimates" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_showMin_Click"/>
                 <MenuItem x:Name="mi_showMax" Header="Show Max. Estimates" HorizontalAlignment="Left" Height="20" Width="auto"/>
                 <MenuItem x:Name="mi_showMostLikely" Header="Show Most Likely" HorizontalAlignment="Left" Height="20" Width="auto"/>
             </MenuItem>
