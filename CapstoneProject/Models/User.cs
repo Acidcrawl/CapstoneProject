@@ -50,5 +50,19 @@ namespace CapstoneProject.Models
         {
             return FullNameNoMiddle;
         }
+
+        public override bool Equals(object obj)
+        {
+            User user = (User)obj;
+            if (this.FirstName == user.FirstName && this.MiddleName == user.MiddleName && this.LastName == user.LastName)
+                return true;
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

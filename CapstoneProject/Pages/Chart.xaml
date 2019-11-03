@@ -7,7 +7,7 @@
       xmlns:local="clr-namespace:CapstoneProject.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Chart">
+      Title="Chart" Loaded="Page_Loaded">
 
     <Grid x:Name="mainGrid"  SizeChanged="Grid_SizeChanged">
         <ScrollViewer x:Name="scrollViewer" HorizontalContentAlignment="Left" VerticalContentAlignment="top" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="scrollViewer_PreviewMouseWheel">

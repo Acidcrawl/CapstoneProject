@@ -25,9 +25,10 @@ namespace CapstoneProject.DAL
         public Project Insert(Project newProject)
         {
             conn.Open();
-            string query = "insert into Project(Name, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values(@name, @startDate, @workingHours, @projectOwner)";
+            string query = "insert into Project(Name, Description, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values(@name, @description, @startDate, @workingHours, @projectOwner)";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@name", newProject.Name);
+            cmd.Parameters.AddWithValue("@description", newProject.Description);
             cmd.Parameters.AddWithValue("@startDate",((object)newProject.StartDate) ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@workingHours",newProject.WorkingHours);
             cmd.Parameters.AddWithValue("@projectOwner",newProject.ProjectOwner.Id);
@@ -48,11 +49,12 @@ namespace CapstoneProject.DAL
         public int Update(Project updatedProject)
         {
             conn.Open();
-            string query = "update Project set Name = @name, WorkingHours=@workingHours, ProjectOwner=@projectOwner Where ProjectId=@projectid";
+            string query = "update Project set Name = @name, Description = @description, WorkingHours=@workingHours, ProjectOwner=@projectOwner Where ProjectId=@projectid";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@name", updatedProject.Name);
+            cmd.Parameters.AddWithValue("@description", updatedProject.Description);
             cmd.Parameters.AddWithValue("@workingHours", updatedProject.WorkingHours);
-            cmd.Parameters.AddWithValue("@projectOwner", updatedProject.ProjectOwner);
+            cmd.Parameters.AddWithValue("@projectOwner", updatedProject.ProjectOwner.Id);
             cmd.Parameters.AddWithValue("@projectid", updatedProject.Id);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
