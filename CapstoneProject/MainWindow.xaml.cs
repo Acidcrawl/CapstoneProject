@@ -73,30 +73,47 @@ namespace CapstoneProject
             this.Close();
             window.ShowDialog();
         }
-
+        /// <summary>
+        /// Shows minimum duration subtasks---By Alankar Pokhrel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mi_showMin_Click(object sender, RoutedEventArgs e)
         {
-            mi_showMin.Header+= "[✓]";
-            mi_showMax.Header += "[ ]";
-            mi_showMostLikely.Header += "[ ]";
+            //Selected duration
+            mi_showMin.Header=          "Show Min. Estimates[✓]";
+            mi_showMax.Header =         "Show Max. Estimates[  ]";
+            mi_showMostLikely.Header =  "Show Most Likely   [  ]";
             
             Chart newChart = new Chart(project, "minDuration");
             frameMain.Content = newChart;
         }
+        /// <summary>
+        /// Shows maximum duration subtasks----By Alankar Pokhrel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mi_showMax_Click(object sender, RoutedEventArgs e)
         {
-            mi_showMin.Header += "[ ]";
-            mi_showMax.Header += "[✓]";
-            mi_showMostLikely.Header += "[ ]";
+            //Selected duration
+            mi_showMin.Header = "Show Min. Estimates[  ]";
+            mi_showMax.Header = "Show Max. Estimates[✓]";
+            mi_showMostLikely.Header = "Show Most Likely   [  ]"; 
             Chart newChart = new Chart(project, "maxDuration");
             frameMain.Content = newChart;
 
         }
+        /// <summary>
+        /// Shows most likely duration subtasks----By Alankar Pokhrel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mi_showMostLikely_Click(object sender, RoutedEventArgs e)
         {
-            mi_showMin.Header += "[ ]";
-            mi_showMax.Header += "[ ]";
-            mi_showMostLikely.Header += "[✓]";
+            //Selected duration
+            mi_showMin.Header = "Show Min. Estimates[  ]";
+            mi_showMax.Header = "Show Max. Estimates[  ]";
+            mi_showMostLikely.Header = "Show Most Likely   [✓]"; 
             Chart newChart = new Chart(project, "mostLikelyDuration");
             frameMain.Content = newChart;
         }

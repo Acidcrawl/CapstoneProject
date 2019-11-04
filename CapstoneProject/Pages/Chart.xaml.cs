@@ -96,13 +96,29 @@ namespace CapstoneProject.Pages
 
         // Created by Sandro Pawlidis (10/15/2019)
         private int DrawSubTasks(Task parent, double topMargin) {
+            //min/max/mostlikely duration for subtasks
+            double tempDuration = 0;
+            if (duration == "" || duration == "minDuration")
+            {
+                tempDuration = parent.MinDuration;
+            }
+            else if (duration == "maxDuration")
+            {
+                tempDuration = parent.MaxDuration;
+
+            }
+            else if (duration == "mostLikelyDuration")
+            {
+                tempDuration = parent.MostLikelyDuration;
+
+            }
             double newTopMargin = topMargin;
             double minWidth = int.MaxValue;
 
             int subtaskCount = 0;
             for (int i = 0; i < parent.DependentTasks.Count; i++) {
                 subtaskCount += DrawSubTasks(parent.DependentTasks[i], newTopMargin);
-                Point start = new Point(((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth + parent.MinDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
+                Point start = new Point(((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth + tempDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
                 Point end = new Point(((DateTime)parent.DependentTasks[i].StartedDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
 
                 double width = start.X + (end.X - start.X) / 2;
@@ -130,19 +146,7 @@ namespace CapstoneProject.Pages
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
             //Min/Max/mostlikely view----By Alankar Pokhrel
-            if (duration == "" || duration == "minDuration")
-            {
-                t.Width = parent.MinDuration * dayWidth - dayWidth / 4;
-            }else if(duration== "maxDuration")
-            {
-                t.Width = parent.MaxDuration * dayWidth - dayWidth / 4;
-
-            }
-            else if(duration== "mostLikelyDuration")
-            {
-                t.Width = parent.MostLikelyDuration * dayWidth - dayWidth / 4;
-
-            }
+            t.Width = tempDuration * dayWidth - dayWidth / 4;
             mainCanvas.Children.Add(t);
 
             //button
