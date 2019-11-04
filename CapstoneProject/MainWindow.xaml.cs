@@ -81,9 +81,9 @@ namespace CapstoneProject
         private void mi_showMin_Click(object sender, RoutedEventArgs e)
         {
             //Selected duration
-            mi_showMin.Header=          "Show Min. Estimates[✓]";
-            mi_showMax.Header =         "Show Max. Estimates[  ]";
-            mi_showMostLikely.Header =  "Show Most Likely   [  ]";
+            mi_showMin.Header= "[✓]   Show Min. Estimates";
+            mi_showMax.Header = "[  ]   Show Max. Estimates";
+            mi_showMostLikely.Header = "[  ]   Show Most Likely";
             
             Chart newChart = new Chart(project, "minDuration");
             frameMain.Content = newChart;
@@ -96,9 +96,9 @@ namespace CapstoneProject
         private void mi_showMax_Click(object sender, RoutedEventArgs e)
         {
             //Selected duration
-            mi_showMin.Header = "Show Min. Estimates[  ]";
-            mi_showMax.Header = "Show Max. Estimates[✓]";
-            mi_showMostLikely.Header = "Show Most Likely   [  ]"; 
+            mi_showMin.Header = "[  ]   Show Min. Estimates";
+            mi_showMax.Header = "[✓]   Show Max. Estimates";
+            mi_showMostLikely.Header = "[  ]   Show Most Likely";
             Chart newChart = new Chart(project, "maxDuration");
             frameMain.Content = newChart;
 
@@ -111,9 +111,9 @@ namespace CapstoneProject
         private void mi_showMostLikely_Click(object sender, RoutedEventArgs e)
         {
             //Selected duration
-            mi_showMin.Header = "Show Min. Estimates[  ]";
-            mi_showMax.Header = "Show Max. Estimates[  ]";
-            mi_showMostLikely.Header = "Show Most Likely   [✓]"; 
+            mi_showMin.Header = "[  ]   Show Min. Estimates";
+            mi_showMax.Header = "[  ]   Show Max. Estimates";
+            mi_showMostLikely.Header = "[✓]   Show Most Likely";
             Chart newChart = new Chart(project, "mostLikelyDuration");
             frameMain.Content = newChart;
         }
