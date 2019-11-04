@@ -38,11 +38,22 @@ namespace CapstoneProject.Pages
         int buttonHeight = 25;
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
-
+        private string duration = "";
         public Chart(Project project) {
             InitializeComponent();
 
             Project = project;
+            this.PreviewMouseWheel += ZoomCanvas;
+
+            addItemsHashTable();
+            addItemsCombo();
+        }
+        public Chart(Project project,string _duration)
+        {
+            InitializeComponent();
+
+            Project = project;
+            duration=_duration;
             this.PreviewMouseWheel += ZoomCanvas;
 
             addItemsHashTable();
@@ -118,7 +129,20 @@ namespace CapstoneProject.Pages
             t.ToolTip = createToolTip(parent);
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
-            t.Width = parent.MinDuration * dayWidth - dayWidth / 4;
+            //Min/Max/mostlikely view----By Alankar Pokhrel
+            if (duration == "" || duration == "minDuration")
+            {
+                t.Width = parent.MinDuration * dayWidth - dayWidth / 4;
+            }else if(duration== "maxDuration")
+            {
+                t.Width = parent.MaxDuration * dayWidth - dayWidth / 4;
+
+            }
+            else if(duration== "mostLikelyDuration")
+            {
+                t.Width = parent.MostLikelyDuration * dayWidth - dayWidth / 4;
+
+            }
             mainCanvas.Children.Add(t);
 
             //button

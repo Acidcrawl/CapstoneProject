@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Task = CapstoneProject.Models.Task;
 
 namespace CapstoneProject
 {
@@ -74,6 +75,33 @@ namespace CapstoneProject
         }
 
         private void mi_showMin_Click(object sender, RoutedEventArgs e)
+        {
+            mi_showMin.Header+= "[✓]";
+            mi_showMax.Header += "[ ]";
+            mi_showMostLikely.Header += "[ ]";
+            
+            Chart newChart = new Chart(project, "minDuration");
+            frameMain.Content = newChart;
+        }
+        private void mi_showMax_Click(object sender, RoutedEventArgs e)
+        {
+            mi_showMin.Header += "[ ]";
+            mi_showMax.Header += "[✓]";
+            mi_showMostLikely.Header += "[ ]";
+            Chart newChart = new Chart(project, "maxDuration");
+            frameMain.Content = newChart;
+
+        }
+        private void mi_showMostLikely_Click(object sender, RoutedEventArgs e)
+        {
+            mi_showMin.Header += "[ ]";
+            mi_showMax.Header += "[ ]";
+            mi_showMostLikely.Header += "[✓]";
+            Chart newChart = new Chart(project, "mostLikelyDuration");
+            frameMain.Content = newChart;
+        }
+
+        private void mi_showMax_Click_1(object sender, RoutedEventArgs e)
         {
 
         }
