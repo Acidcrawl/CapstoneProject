@@ -27,8 +27,12 @@ namespace CapstoneProject.DAL {
 
         public int Insert(Task newTask) {
             conn.Open();
-            string query = "insert into Task(Name, Description, MinEstDuration, MaxEstDuration, MostLikelyeEstDuration, StartDate, EndDate, ModifiedDate, StatusId, UserId, ProjectId, RootNode) values(@name, @description, @minduration, @maxduration, @mostlikelyduration, @starteddate, @completeddate, @modifieddate, @status, @ownerid, @projectid, @rootnode)";
+            string query = "insert into Task(Name, Description, MinEstDuration, MaxEstDuration, MostLikelyEstDuration, StartDate, EndDate, ModifiedDate, StatusId, UserId, ProjectId, RootNode) values(@name, @description, @minduration, @maxduration, @mostlikelyduration, @starteddate, @completeddate, @modifieddate, @status, @ownerid, @projectid, @rootnode)";
             SqlCommand cmd = new SqlCommand(query, conn);
+            SqlParameter outParameter = new SqlParameter("@TaskId", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
+
+            cmd.Parameters.Add(outParameter);
+
             cmd.Parameters.AddWithValue("@name", newTask.Name);
             cmd.Parameters.AddWithValue("@description", newTask.Description);
             cmd.Parameters.AddWithValue("@minduration", newTask.MinDuration);
@@ -36,13 +40,18 @@ namespace CapstoneProject.DAL {
             cmd.Parameters.AddWithValue("@mostlikelyduration", newTask.MostLikelyDuration);
             cmd.Parameters.AddWithValue("@starteddate", ((object)newTask.StartedDate) ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@completeddate", ((object)newTask.CompletedDate) ?? DBNull.Value);
+            //TODO: Make the dates real
+            cmd.Parameters.AddWithValue("@startDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@endDate", DateTime.Now);
             cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
             cmd.Parameters.AddWithValue("@status", newTask.Status);
             cmd.Parameters.AddWithValue("@ownerid", newTask.Owner.Id);
             cmd.Parameters.AddWithValue("@projectid", newTask.ProjectId);
             cmd.Parameters.AddWithValue("@rootnode", newTask.RootNode);
             int effectedIds = cmd.ExecuteNonQuery();
+            //int taskId = (int)outParameter.Value;
             conn.Close();
+            //new ODependency().Insert(new Dependency());
             return effectedIds;
         }
         public int Delete(int taskId) {
@@ -58,12 +67,16 @@ namespace CapstoneProject.DAL {
             //TODO: Do we need to add an @taskId parameter to the command?
             string query = "update Task set Name = @name, Description=@description, MinEstDuration=@minduration, MaxEstDuration=@maxduration, MostLikelyEstDuration=@mostlikelyduration, EndDate=@enddate, ModifiedDate=@modifieddate, StatusId=@status, UserId=@ownerid, ProjectId=@projectid, RootNode=@rootnode Where TaskId=@taskid";
             SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskid", updatedTask.Id);
             cmd.Parameters.AddWithValue("@name", updatedTask.Name);
             cmd.Parameters.AddWithValue("@description", updatedTask.Description);
             cmd.Parameters.AddWithValue("@minduration", updatedTask.MinDuration);
             cmd.Parameters.AddWithValue("@maxduration", updatedTask.MaxDuration);
             cmd.Parameters.AddWithValue("@mostlikelyduration", updatedTask.MostLikelyDuration);
             cmd.Parameters.AddWithValue("@completeddate", ((object)updatedTask.CompletedDate) ?? DBNull.Value);
+            //TODO: Make the dates real
+            cmd.Parameters.AddWithValue("@startDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@endDate", DateTime.Now);
             cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
             cmd.Parameters.AddWithValue("@status", updatedTask.Status);
             cmd.Parameters.AddWithValue("@ownerid", updatedTask.Owner.Id);
@@ -119,7 +132,9 @@ namespace CapstoneProject.DAL {
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@id", id);
             SqlDataReader reader = cmd.ExecuteReader();
+            bool foundTask = false;
             while (reader.Read()) {
+                foundTask = true;
                 task.Id = (int)reader["TaskId"];
                 task.Name = (string)reader["Name"];
                 task.Description = (string)reader["description"];
@@ -139,7 +154,7 @@ namespace CapstoneProject.DAL {
                 task.RootNode = (Boolean)reader["RootNode"];
             }
             conn.Close();
-            return task;
+            return foundTask ? task : null;
         }
     }
 }

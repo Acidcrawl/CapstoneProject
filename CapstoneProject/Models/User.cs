@@ -1,7 +1,8 @@
 ﻿/*
  * Created by Levi Delezene 
  */
- 
+
+using CapstoneProject.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,16 @@ namespace CapstoneProject.Models
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public User save() {
+            OUser oUser = new OUser();
+            if (oUser.Get(Id) == null) {
+                oUser.Insert(this);
+            } else {
+                oUser.Update(this);
+            }
+            return this;
         }
     }
 }

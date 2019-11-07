@@ -1,30 +1,27 @@
 ﻿/*
  * Created by Levi Delezene 
  */
- 
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CapstoneProject.DAL;
 //added namespace-alankar
-namespace CapstoneProject.Models
-{
-    public enum Status
-    {
+namespace CapstoneProject.Models {
+    public enum Status {
         Not_Started = 0,
         In_Progress,
         Completed
     }
 
-    public class Task
-    {
+    public class Task {
         //These classes are using auto properties. I don't know how they'll work with the database stuff.
         //It's easy enough to change if they won't work
 
-        public Task()
-        {
+        public Task() {
             this.DependentTasks = new List<Task>();
         }
 
@@ -48,10 +45,6 @@ namespace CapstoneProject.Models
         public DateTime DeletedDate { get; set; }
         public Boolean RootNode { get; set; }
 
-        public void AddDependentTask(Task t) {
-            this.DependentTasks.Add(t);
-        }
-
         //modified date created by alankar pokhrel
         public DateTime? ModifiedDate { get; set; }
 
@@ -59,6 +52,25 @@ namespace CapstoneProject.Models
         public User Owner { get; set; }
         public Status Status { get; set; }
         public int ProjectId { get; set; }
+
+        public void AddDependentTask(Task t) {
+            this.DependentTasks.Add(t);
+            //new ODependency().Insert(new Dependency() { DepOnTaskId = this.Id, TaskId = t.Id });
+        }
+
+        public Task save() {
+            OTask oTask = new OTask();
+            if (oTask.Get(Id) == null) {
+                oTask.Insert(this);
+            } else {
+                oTask.Update(this);
+            }
+            return this;
+        }
+
+        public override string ToString() {
+            return $"{Name}";
+        }
     }
 }
 

@@ -38,13 +38,26 @@ namespace CapstoneProject {
                 tbxTaskDescription.Text = taskToEdit.Description;
                 tbxMaxDuration.Text = taskToEdit.MaxDuration.ToString();
                 tbxMinDuration.Text = taskToEdit.MinDuration.ToString();
-                cmbPriority.SelectedValue = taskToEdit.Priority;
+                //Still can't figure out how to set the combobox values when editing
+                //cmbPriority.SelectedValue = taskToEdit.Priority;
+                //cmbStatus.SelectedValue = taskToEdit.Status;
+                //cmbOwner.Item = taskToEdit.Owner;
+                //cmbPriority.SelectedValue = taskToEdit.Priority;
             }
         }
 
         public List<User> Users { get; } = new OUser().Select();
         public List<Status> Statuses { get; } = new List<Status> { Status.Completed, Status.In_Progress, Status.Not_Started};
         public List<int> Priorities { get; } = new List<int> { 1,2,3,4,5};
+        public List<Task> Tasks {
+            get {
+                List<Task> tasks = new OTask().Select(_chart.Project.Id);
+                if (taskToEdit != null) {
+                    tasks.Remove(taskToEdit);
+                }
+                return tasks;
+            }
+        }
 
         private bool validateInput() {
             bool ret = true;
@@ -96,6 +109,9 @@ namespace CapstoneProject {
                 Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex]
             };
 
+            Task parent = (Task)cmbTasks.SelectedItem;
+            parent.AddDependentTask(task);
+            //new ODependency().Insert(new Dependency() { DepOnTaskId = parent.Id, TaskId = task.Id });
 
             //Maybe find a better way to do this
             switch (cmbStatus.Text) {
@@ -110,9 +126,7 @@ namespace CapstoneProject {
                     break;
             }
 
-            new OTask().Insert(task);
-
-            return task;
+            return task.save();
         }
 
         private Task editTask() {
@@ -122,8 +136,11 @@ namespace CapstoneProject {
             taskToEdit.Description = tbxTaskDescription.Text;
             taskToEdit.MinDuration = float.Parse(tbxMinDuration.Text);
             taskToEdit.MaxDuration = float.Parse(tbxMaxDuration.Text);
-            taskToEdit.Priority = int.Parse(cmbPriority.Text);
-            taskToEdit.Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex];
+            //taskToEdit.Priority = int.Parse(cmbPriority.Text);
+            taskToEdit.Priority = (int)cmbPriority.SelectedItem;
+            taskToEdit.Owner = (User)cmbOwner.SelectedItem;
+            ((Task)cmbTasks.SelectedItem).AddDependentTask(taskToEdit);
+            //taskToEdit.Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex];
 
             switch (cmbStatus.Text) {
                 case "Not Started":
@@ -137,13 +154,11 @@ namespace CapstoneProject {
                     break;
             }
 
-            new OTask().Update(taskToEdit);
-
-            return taskToEdit;
+            return taskToEdit.save();
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e) {
-            try {
+            //try {
                 Task task;
                 if (taskToEdit != null) {
                     task = editTask();
@@ -151,15 +166,14 @@ namespace CapstoneProject {
                     task = createTask();
                 }
 
-                _chart.Newtask = task;
-
                 if(task != null) {
+                    _chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
                     Close();
                 }
 
-            } catch (Exception excep) {
-                MessageBox.Show(excep.ToString());
-            }
+            //} catch (Exception excep) {
+            //    MessageBox.Show(excep.ToString());
+            //}
         }
 
 
@@ -173,8 +187,6 @@ namespace CapstoneProject {
                 } else {
                     task = createTask();
                 }
-
-                _chart.Newtask = task;
 
             } catch (Exception excep) {
                 MessageBox.Show(excep.ToString());
