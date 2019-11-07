@@ -111,7 +111,6 @@ namespace CapstoneProject {
 
             Task parent = (Task)cmbTasks.SelectedItem;
             parent.AddDependentTask(task);
-            //new ODependency().Insert(new Dependency() { DepOnTaskId = parent.Id, TaskId = task.Id });
 
             //Maybe find a better way to do this
             switch (cmbStatus.Text) {
