@@ -46,7 +46,7 @@ namespace CapstoneProject.Pages
             this.PreviewMouseWheel += ZoomCanvas;
 
             addItemsHashTable();
-            addItemsCombo();
+           // addItemsCombo();
         }
         public Chart(Project project,string _duration)
         {
@@ -57,7 +57,7 @@ namespace CapstoneProject.Pages
             this.PreviewMouseWheel += ZoomCanvas;
 
             addItemsHashTable();
-            addItemsCombo();
+           // addItemsCombo();
         }
 
         /// <summary>
@@ -395,14 +395,14 @@ namespace CapstoneProject.Pages
         }
 
         //Adds months to the combo box - Chase Torres (9/26/2019)
-        private void addItemsCombo()
-        {
-            foreach (KeyValuePair<string, int> keyEntry in dayMonths)
-            {
-                comboBoxMonths.Items.Add(keyEntry.Key);
-            }
-            comboBoxMonths.SelectedIndex = 0;
-        }
+        //private void addItemsCombo()
+        //{
+        //    foreach (KeyValuePair<string, int> keyEntry in dayMonths)
+        //    {
+        //        comboBoxMonths.Items.Add(keyEntry.Key);
+        //    }
+        //    comboBoxMonths.SelectedIndex = 0;
+        //}
 
         // Adds the months and days to the dictionary - Chase Torres (9/26/2019)
         private void addItemsHashTable()
@@ -423,17 +423,17 @@ namespace CapstoneProject.Pages
 
         //Redraws the calendar based off the month selected - Chase Torres(9/26/2019)
         //Modified this to move the scrollbar to the start of the selected month. - Chase Torres(10/7/2019)
-        private void ComboBoxMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            double monthPosition = 0;
-            double totalDays = 0;
-            for (int i = 0; i < dayMonths.Keys.ToList().IndexOf((string)comboBoxMonths.SelectedItem); i++)
-            {
-                totalDays += dayMonths.Values.ElementAt(i);
-            }
-            monthPosition = totalDays * dayWidth;
-            scrollViewer.ScrollToHorizontalOffset(monthPosition);
-        }
+        //private void ComboBoxMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    double monthPosition = 0;
+        //    double totalDays = 0;
+        //    for (int i = 0; i < dayMonths.Keys.ToList().IndexOf((string)comboBoxMonths.SelectedItem); i++)
+        //    {
+        //        totalDays += dayMonths.Values.ElementAt(i);
+        //    }
+        //    monthPosition = totalDays * dayWidth;
+        //    scrollViewer.ScrollToHorizontalOffset(monthPosition);
+        //}
 
         //Going to try to use a groupbox as the container to add tasks to the canvas
         private void addGroupBoxCanvas()
