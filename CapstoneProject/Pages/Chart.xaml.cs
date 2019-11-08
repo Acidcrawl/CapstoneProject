@@ -15,6 +15,7 @@ using System.Collections;
 using CapstoneProject.Models;
 using CapstoneProject.Controls;
 using CapstoneProject.DAL;
+using System.Collections.ObjectModel;
 
 namespace CapstoneProject.Pages
 {
@@ -31,7 +32,6 @@ namespace CapstoneProject.Pages
         private ScaleTransform zoom;
         private bool translating = false;
         private Project _project;
-        private Task newtask;
 
         private double dayWidth = Properties.Settings.Default.dayWidth;
         int buttonSpacing = 50;
@@ -66,11 +66,11 @@ namespace CapstoneProject.Pages
         /// Populates all Tasks and Dependencies for Project from database
         /// </summary>
         /// <returns>List of Root Tasks</returns>
-        private List<Task> GetTasksAndDependanciesFromDatabase()
+        public List<Task> GetTasksAndDependanciesFromDatabase()
         {
             //Retreive Task List
             OTask oTask = new OTask();
-            List<Task> tasks = oTask.Select(_project.Id);
+            ObservableCollection<Task> tasks = oTask.Select(_project.Id);
 
 
             //Loop through task list and add dependencies
@@ -89,8 +89,9 @@ namespace CapstoneProject.Pages
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
-        private void DrawGraph(List<Task> mainLevel) {
+        public void DrawGraph(List<Task> mainLevel) {
             //TODO: Add support for multiple root nodes.
+            DrawCalendar(365);
             int i = DrawSubTasks(mainLevel[0], 50);
         }
 
@@ -141,7 +142,7 @@ namespace CapstoneProject.Pages
             }
 
             //taskcontrol
-            TaskControl t = new TaskControl(parent);
+            TaskControl t = new TaskControl(parent, this);
             t.ToolTip = createToolTip(parent);
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
@@ -201,25 +202,13 @@ namespace CapstoneProject.Pages
             return path;
         }
 
-        public Task Newtask
-        {
-            get
-            {
-                return newtask;
-            }
-
-            set
-            {
-                newtask = value;
-            }
-        }
 
         public Project Project { get => _project; set => _project = value; }
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new frmCreateTask(this).ShowDialog();
-            AddTask(newtask);
+            new frmTask(this).ShowDialog();
+            DrawGraph(GetTasksAndDependanciesFromDatabase());
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
@@ -289,7 +278,7 @@ namespace CapstoneProject.Pages
             //Canvas.SetLeft(taskGrid, rectVal.X);
             //mainCanvas.Children.Add(taskGrid);
 
-            TaskControl taskControl = new TaskControl(task);
+            TaskControl taskControl = new TaskControl(task, this);
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
 

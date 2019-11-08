@@ -15,20 +15,25 @@ using System.Windows.Shapes;
 using CapstoneProject.Models;
 using CapstoneProject.Windows;
 using CapstoneProject.DAL;
+using CapstoneProject.Pages;
 
 namespace CapstoneProject.Controls {
     /// <summary>
     /// Interaction logic for TaskControl.xaml
     /// </summary>
     public partial class TaskControl : UserControl {
-        public TaskControl(Task task) {
+        Chart _chart;
+
+        public TaskControl(Task task, Chart chart) {
             InitializeComponent();
             DataContext = task;
+            this._chart = chart;
         }
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {
             Task task = (Task)((MenuItem)sender).DataContext;
-            new frmCreateTask(null, new OTask().Get(task.Id)).ShowDialog();
+            new frmTask(_chart, task).ShowDialog();
+            //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }
     }
 }
