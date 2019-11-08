@@ -32,7 +32,7 @@ namespace CapstoneProject.Controls {
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {
             Task task = (Task)((MenuItem)sender).DataContext;
-            new frmCreateTask(_chart, new OTask().Get(task.Id)).ShowDialog();
+            new frmTask(_chart, task).ShowDialog();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }
     }

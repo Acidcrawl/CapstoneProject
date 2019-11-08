@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using CapstoneProject.Models;
 using Task = CapstoneProject.Models.Task;
-
+using System.Collections.ObjectModel;
 
 /// <summary>
 /// Written By: Alankar
@@ -87,8 +87,8 @@ namespace CapstoneProject.DAL {
             return effectedIds;
 
         }
-        public List<Task> Select(int ProjectId) {
-            List<Task> taskList = new List<Task>();
+        public ObservableCollection<Task> Select(int ProjectId) {
+            ObservableCollection<Task> taskList = new ObservableCollection<Task>();
             conn.Open();
             string query = "Select * from Task where ProjectId = @projectid";
             SqlCommand cmd = new SqlCommand(query, conn);

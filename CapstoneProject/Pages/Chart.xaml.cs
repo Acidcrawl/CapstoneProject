@@ -15,6 +15,7 @@ using System.Collections;
 using CapstoneProject.Models;
 using CapstoneProject.Controls;
 using CapstoneProject.DAL;
+using System.Collections.ObjectModel;
 
 namespace CapstoneProject.Pages
 {
@@ -69,7 +70,7 @@ namespace CapstoneProject.Pages
         {
             //Retreive Task List
             OTask oTask = new OTask();
-            List<Task> tasks = oTask.Select(_project.Id);
+            ObservableCollection<Task> tasks = oTask.Select(_project.Id);
 
 
             //Loop through task list and add dependencies
@@ -90,7 +91,7 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (10/15/2019)
         public void DrawGraph(List<Task> mainLevel) {
             //TODO: Add support for multiple root nodes.
-            mainCanvas.Children.Clear();
+            DrawCalendar(365);
             int i = DrawSubTasks(mainLevel[0], 50);
         }
 
@@ -206,7 +207,7 @@ namespace CapstoneProject.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new frmCreateTask(this).ShowDialog();
+            new frmTask(this).ShowDialog();
             DrawGraph(GetTasksAndDependanciesFromDatabase());
         }
 

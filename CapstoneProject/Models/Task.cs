@@ -55,15 +55,31 @@ namespace CapstoneProject.Models {
 
         public void AddDependentTask(Task t) {
             this.DependentTasks.Add(t);
-            //new ODependency().Insert(new Dependency() { DepOnTaskId = this.Id, TaskId = t.Id });
         }
 
         public Task save() {
             OTask oTask = new OTask();
+            ODependency oDependency = new ODependency();
             if (oTask.Get(Id) == null) {
                 oTask.Insert(this);
+    
+                //Create Dependancies
+                foreach (Task task in DependentTasks)
+                {
+                    oDependency.Insert(new Dependency(task.Id, this.Id));
+                }
+
             } else {
                 oTask.Update(this);
+
+                //Delete Dependancies
+                oDependency.DeleteAllForDepOnTask(this.Id);
+
+                //Create Dependancies
+                foreach (Task task in DependentTasks)
+                {
+                    oDependency.Insert(new Dependency(task.Id, this.Id));
+                }
             }
             return this;
         }
