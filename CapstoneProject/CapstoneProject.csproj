@@ -70,6 +70,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CalculationService.cs" />
+    <Compile Include="Controls\MultiSelectComboBox.xaml.cs">
+      <DependentUpon>MultiSelectComboBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TaskControl.xaml.cs">
       <DependentUpon>TaskControl.xaml</DependentUpon>
     </Compile>
@@ -99,6 +102,10 @@
     <Compile Include="Windows\frmTest.xaml.cs">
       <DependentUpon>frmTest.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\MultiSelectComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\TaskControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,7 +126,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\frmCreateTask.xaml">
+    <Page Include="Windows\frmTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,8 +146,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\frmCreateTask.xaml.cs">
-      <DependentUpon>frmCreateTask.xaml</DependentUpon>
+    <Compile Include="Windows\frmTask.xaml.cs">
+      <DependentUpon>frmTask.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\frmPERTChart.xaml.cs">
       <DependentUpon>frmPERTChart.xaml</DependentUpon>

@@ -83,6 +83,36 @@ namespace CapstoneProject.DAL
             }
             return projectList;
         }
-    
+
+        /// <summary>
+        /// Gets project with given id
+        /// Levi Delezene
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Project Get(int id) {
+            Project project = new Project();
+            conn.Open();
+            string query = "Select * from User where UserId=@id";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataReader reader = cmd.ExecuteReader();
+            bool foundProject = false;
+
+            while (reader.Read()) {
+                foundProject = true;
+                project.Id = (int)reader["UserId"];
+                project.Name = (string)reader["Name"];
+                project.Description = (string)reader["Description"];
+                if ((reader["StartDate"]) != DBNull.Value)
+                    project.StartDate = (DateTime)reader["StartDate"];
+                project.WorkingHours = (double)reader["WorkingHours"];
+                project.ProjectOwner = new OUser().Get((int)reader["ProjectOwner"]);
+            }
+
+            conn.Close();
+            return foundProject ? project : null;
+        }
+
     }
 }

@@ -1,7 +1,8 @@
 ﻿/*
  * Created by Levi Delezene 
  */
- 
+
+using CapstoneProject.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,6 @@ namespace CapstoneProject.Models
 {
     public class Project
     {
-        private string description;
-        private List<Task> tasks;
-
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -30,6 +28,16 @@ namespace CapstoneProject.Models
         public override string ToString()
         {
             return Name;
+        }
+
+        public Project save() {
+            OProject oProject = new OProject();
+            if (oProject.Get(Id) == null) {
+                oProject.Insert(this);
+            } else {
+                oProject.Update(this);
+            }
+            return this;
         }
     }
 }

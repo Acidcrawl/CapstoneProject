@@ -15,6 +15,7 @@ using System.Collections;
 using CapstoneProject.Models;
 using CapstoneProject.Controls;
 using CapstoneProject.DAL;
+using System.Collections.ObjectModel;
 
 namespace CapstoneProject.Pages
 {
@@ -32,7 +33,6 @@ namespace CapstoneProject.Pages
         private TranslateTransform move;
         private ScaleTransform zoom;
         private Project _project;
-        private Task newtask;
 
         private double dayWidth = Properties.Settings.Default.dayWidth;
         int buttonSpacing = 50;
@@ -54,7 +54,7 @@ namespace CapstoneProject.Pages
             this.MouseUp += ReleaseMouseDrag;
 
             addItemsHashTable();
-            addItemsCombo();
+           // addItemsCombo();
         }
         public Chart(Project project,string _duration)
         {
@@ -65,7 +65,7 @@ namespace CapstoneProject.Pages
             this.PreviewMouseWheel += ZoomCanvas;
 
             addItemsHashTable();
-            addItemsCombo();
+           // addItemsCombo();
         }
 
         /// <summary>
@@ -74,11 +74,11 @@ namespace CapstoneProject.Pages
         /// Populates all Tasks and Dependencies for Project from database
         /// </summary>
         /// <returns>List of Root Tasks</returns>
-        private List<Task> GetTasksAndDependanciesFromDatabase()
+        public List<Task> GetTasksAndDependanciesFromDatabase()
         {
             //Retreive Task List
             OTask oTask = new OTask();
-            List<Task> tasks = oTask.Select(_project.Id);
+            ObservableCollection<Task> tasks = oTask.Select(_project.Id);
 
 
             //Loop through task list and add dependencies
@@ -97,6 +97,7 @@ namespace CapstoneProject.Pages
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
+<<<<<<< HEAD
         private int DrawGraph(List<Task> mainLevel) {
             int top = 50;
             for (int i = 0; i < mainLevel.Count; i++) { 
@@ -105,6 +106,12 @@ namespace CapstoneProject.Pages
             }
 
             return top;
+=======
+        public void DrawGraph(List<Task> mainLevel) {
+            //TODO: Add support for multiple root nodes.
+            DrawCalendar(365);
+            int i = DrawSubTasks(mainLevel[0], 50);
+>>>>>>> 019879c6ba75f35c252766c05c3f3043f6df1491
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
@@ -156,7 +163,7 @@ namespace CapstoneProject.Pages
             }
 
             //taskcontrol
-            TaskControl t = new TaskControl(parent);
+            TaskControl t = new TaskControl(parent, this);
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
@@ -246,25 +253,13 @@ namespace CapstoneProject.Pages
             return path;
         }
 
-        public Task Newtask
-        {
-            get
-            {
-                return newtask;
-            }
-
-            set
-            {
-                newtask = value;
-            }
-        }
 
         public Project Project { get => _project; set => _project = value; }
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new frmCreateTask(this).ShowDialog();
-            AddTask(newtask);
+            new frmTask(this).ShowDialog();
+            DrawGraph(GetTasksAndDependanciesFromDatabase());
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
@@ -332,7 +327,7 @@ namespace CapstoneProject.Pages
             //Canvas.SetLeft(taskGrid, rectVal.X);
             //mainCanvas.Children.Add(taskGrid);
 
-            TaskControl taskControl = new TaskControl(task);
+            TaskControl taskControl = new TaskControl(task, this);
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
 
@@ -448,14 +443,14 @@ namespace CapstoneProject.Pages
         }
 
         //Adds months to the combo box - Chase Torres (9/26/2019)
-        private void addItemsCombo()
-        {
-            foreach (KeyValuePair<string, int> keyEntry in dayMonths)
-            {
-                comboBoxMonths.Items.Add(keyEntry.Key);
-            }
-            comboBoxMonths.SelectedIndex = 0;
-        }
+        //private void addItemsCombo()
+        //{
+        //    foreach (KeyValuePair<string, int> keyEntry in dayMonths)
+        //    {
+        //        comboBoxMonths.Items.Add(keyEntry.Key);
+        //    }
+        //    comboBoxMonths.SelectedIndex = 0;
+        //}
 
         // Adds the months and days to the dictionary - Chase Torres (9/26/2019)
         private void addItemsHashTable()
@@ -476,17 +471,17 @@ namespace CapstoneProject.Pages
 
         //Redraws the calendar based off the month selected - Chase Torres(9/26/2019)
         //Modified this to move the scrollbar to the start of the selected month. - Chase Torres(10/7/2019)
-        private void ComboBoxMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            double monthPosition = 0;
-            double totalDays = 0;
-            for (int i = 0; i < dayMonths.Keys.ToList().IndexOf((string)comboBoxMonths.SelectedItem); i++)
-            {
-                totalDays += dayMonths.Values.ElementAt(i);
-            }
-            monthPosition = totalDays * dayWidth;
-            scrollViewer.ScrollToHorizontalOffset(monthPosition);
-        }
+        //private void ComboBoxMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    double monthPosition = 0;
+        //    double totalDays = 0;
+        //    for (int i = 0; i < dayMonths.Keys.ToList().IndexOf((string)comboBoxMonths.SelectedItem); i++)
+        //    {
+        //        totalDays += dayMonths.Values.ElementAt(i);
+        //    }
+        //    monthPosition = totalDays * dayWidth;
+        //    scrollViewer.ScrollToHorizontalOffset(monthPosition);
+        //}
 
         //Going to try to use a groupbox as the container to add tasks to the canvas
         private void addGroupBoxCanvas()

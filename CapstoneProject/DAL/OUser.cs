@@ -97,5 +97,32 @@ namespace CapstoneProject.DAL
             conn.Close();
             return user;
         }
+
+
+        /// <summary>
+        /// Gets user with given id
+        /// Levi Delezene
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public User Get(int id) {
+            User user = new User();
+            conn.Open();
+            string query = "Select * from User where UserId=@id";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataReader reader = cmd.ExecuteReader();
+            bool foundUser = false;
+
+            while (reader.Read()) {
+                foundUser = true;
+                user.Id = (int)reader["UserId"];
+                user.FirstName = (string)reader["FirstName"];
+                user.LastName = (string)reader["LastName"];
+            }
+
+            conn.Close();
+            return foundUser ? user: null;
+        }
     }
 }

@@ -20,9 +20,10 @@ namespace CapstoneProject.DAL
         public int Insert(Dependency newDependency)
         {
             conn.Open();
-            string query = "insert into Dependency(TaskId) values('" + newDependency.TaskId + "')'";
+            string query = $"insert into Dependency(TaskId, DepOnTaskId) values(@taskId,@depontaskid)";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@taskId", newDependency.TaskId);
+            cmd.Parameters.AddWithValue("@depontaskid", newDependency.DepOnTaskId);
             int effectedIds = cmd.ExecuteNonQuery();
             conn.Close();
             return effectedIds;
@@ -37,6 +38,18 @@ namespace CapstoneProject.DAL
             conn.Close();
             return effectedIds;
         }
+
+        public int DeleteAllForDepOnTask(int taskId)
+        {
+            conn.Open();
+            string query = "Delete from Dependency Where DepOnTaskId=@taskid";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskid", taskId);
+            int effectedIds = cmd.ExecuteNonQuery();
+            conn.Close();
+            return effectedIds;
+        }
+
         public int Update(Dependency updatedDependency)
         {
             conn.Open();

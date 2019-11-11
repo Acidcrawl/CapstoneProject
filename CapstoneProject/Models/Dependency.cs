@@ -11,6 +11,16 @@ namespace CapstoneProject.Models
 {
     public class Dependency
     {
+        public Dependency()
+        {
+
+        }
+        public Dependency(int TaskId, int DepOnTaskId)
+        {
+            this.TaskId = TaskId;
+            this.DepOnTaskId = DepOnTaskId;
+        }
+
         public int DepOnTaskId { get; set; }
         public int TaskId { get; set; }
     }
