@@ -23,7 +23,7 @@ namespace CapstoneProject.Controls {
     public partial class TaskControl : UserControl {
         public TaskControl(Task task) {
             InitializeComponent();
-            DataContext = task;
+            this.DataContext = task;
         }
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {

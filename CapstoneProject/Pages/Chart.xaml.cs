@@ -26,16 +26,22 @@ namespace CapstoneProject.Pages
     public partial class Chart : Page
     {
 
+        List<Task> taskList;
+
         private Point savedMousePosition;
         private TranslateTransform move;
         private ScaleTransform zoom;
-        private bool translating = false;
         private Project _project;
         private Task newtask;
 
         private double dayWidth = Properties.Settings.Default.dayWidth;
         int buttonSpacing = 50;
         int buttonHeight = 25;
+
+        private TaskControl adjustingTask;
+        private Point previous;
+        private int leftDateChange = -1;
+        private int rightDateChange = -1;
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
         private string duration = "";
@@ -44,6 +50,8 @@ namespace CapstoneProject.Pages
 
             Project = project;
             this.PreviewMouseWheel += ZoomCanvas;
+            this.MouseMove += DragCanvas;
+            this.MouseUp += ReleaseMouseDrag;
 
             addItemsHashTable();
             addItemsCombo();
@@ -89,9 +97,14 @@ namespace CapstoneProject.Pages
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
-        private void DrawGraph(List<Task> mainLevel) {
-            //TODO: Add support for multiple root nodes.
-            int i = DrawSubTasks(mainLevel[0], 50);
+        private int DrawGraph(List<Task> mainLevel) {
+            int top = 50;
+            for (int i = 0; i < mainLevel.Count; i++) { 
+                int spaceUsed = DrawSubTasks(mainLevel[i], top);
+                top += (spaceUsed + 1) * (buttonHeight + buttonSpacing) + 50;
+            }
+
+            return top;
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
@@ -134,6 +147,8 @@ namespace CapstoneProject.Pages
                 points.Add(end);
 
                 Path p = getPath(points);
+
+                Canvas.SetZIndex(p, 99);
                 mainCanvas.Children.Add(p);
 
                 newTopMargin = topMargin + (i + 1) * (buttonHeight + buttonSpacing);
@@ -143,25 +158,55 @@ namespace CapstoneProject.Pages
             //taskcontrol
             TaskControl t = new TaskControl(parent);
             t.ToolTip = createToolTip(parent);
+            t.MouseDown += resizeTask;
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
+            
             //Min/Max/mostlikely view----By Alankar Pokhrel
             t.Width = tempDuration * dayWidth - dayWidth / 4;
+            
+            Canvas.SetZIndex(t, 100);
             mainCanvas.Children.Add(t);
-
-            //button
-            //Button b = new Button();
-            //b.Content = parent.Name;
-            //b.ToolTip = createToolTip(parent);
-            //Canvas.SetLeft(b, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);
-            //Canvas.SetTop(b, topMargin);
-            //b.Width = parent.MinDuration * dayWidth - dayWidth / 4;
-            //b.Height = buttonHeight;
-            //mainCanvas.Children.Add(b);
 
             subtaskCount += (parent.DependentTasks.Count > 1) ? parent.DependentTasks.Count - 1 : 0;
             //MessageBox.Show(subtaskCount.ToString());
             return subtaskCount;
+        }
+
+        // Created by Sandro Pawlidis (11/3/2019)
+        private void progressResizeTask() {
+            Task task = (Task)adjustingTask.DataContext;
+
+            double mouseX = Mouse.GetPosition(mainCanvas).X;
+            double taskX = Canvas.GetLeft(adjustingTask);
+
+            double sign = Math.Sign(taskX + adjustingTask.Width - mouseX);
+            if (rightDateChange != -1) {
+                adjustingTask.Width = sign + adjustingTask.Width;
+                adjustingTask.tbxTaskName.Text = taskX.ToString() + " + " + adjustingTask.Width.ToString() + " - " + mouseX;
+            }
+        }
+
+        // Created by Sandro Pawlidis (11/3/2019)
+        private void resizeTask(object sender, RoutedEventArgs e) {
+            //TaskControl t = (TaskControl)sender;
+            //Task task = (Task)t.DataContext;
+
+            //double mouseX = Mouse.GetPosition(mainCanvas).X;
+            //double taskX = Canvas.GetLeft(t);
+
+            //double mouseOnTask = mouseX - taskX;
+
+            //if (mouseOnTask < t.Width * 0.05) {
+            //    leftDateChange = -1;
+            //    adjustingTask = t;
+            //}
+
+            //else if (mouseOnTask > t.Width * 0.95) {
+            //    rightDateChange = 0;
+            //    adjustingTask = t;
+            //}
+
         }
 
         /// <summary>
@@ -225,8 +270,6 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (9/25/2019)
         private void DrawCalendar(int days)
         {
-            mainCanvas.Children.Clear();
-
             int lblCurrentDay = 1;
             int dicIndex = 0;
             for (int i = 0; i < days; i++)
@@ -295,6 +338,7 @@ namespace CapstoneProject.Pages
 
             Canvas.SetTop(taskControl, 30);
             Canvas.SetLeft(taskControl, rectVal.X);
+
             mainCanvas.Children.Add(taskControl);
 
         }
@@ -337,24 +381,33 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (9/25/2019)
         private void DragCanvas(object sender, RoutedEventArgs e)
         {
-            if (!translating) return;
 
-            Point currentMousePos = Mouse.GetPosition(mainCanvas);
-            move.X += currentMousePos.X - savedMousePosition.X;
-            move.Y += currentMousePos.Y - savedMousePosition.Y;
+            if (leftDateChange != -1 || rightDateChange != -1) {            
+                progressResizeTask();
+                return;
+            }
+
+            //if (!translating) return;
+
+            //Point currentMousePos = Mouse.GetPosition(mainCanvas);
+            //move.X += currentMousePos.X - savedMousePosition.X;
+            //move.Y += currentMousePos.Y - savedMousePosition.Y;
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
         private void SetMouseDrag(object sender, RoutedEventArgs e)
         {
-            translating = true;
+            //translating = true;
             savedMousePosition = Mouse.GetPosition(mainCanvas);
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
         private void ReleaseMouseDrag(object sender, RoutedEventArgs e)
         {
-            translating = false;
+            //translating = false;
+
+            if (leftDateChange != -1 || rightDateChange != -1)
+                leftDateChange = rightDateChange = -1;
         }
 
         // Created by Chris Neeser (10/1/2019)
@@ -448,12 +501,16 @@ namespace CapstoneProject.Pages
 
             SetupCanvas();
 
-            DrawCalendar(365);
 
-            List<Task> taskList = GetTasksAndDependanciesFromDatabase();
+            taskList = GetTasksAndDependanciesFromDatabase();
+
+            int screenHeight = 0;
 
             if (taskList.Count > 0)
-                DrawGraph(taskList);
+                screenHeight = DrawGraph(taskList);
+
+            mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
+            DrawCalendar(365);
         }
     }
 }
