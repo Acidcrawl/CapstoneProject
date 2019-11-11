@@ -26,8 +26,12 @@ namespace CapstoneProject.Controls {
 
         public TaskControl(Task task, Chart chart) {
             InitializeComponent();
+<<<<<<< HEAD
+            this.DataContext = task;
+=======
             DataContext = task;
             this._chart = chart;
+>>>>>>> 019879c6ba75f35c252766c05c3f3043f6df1491
         }
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {
