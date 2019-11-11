@@ -97,21 +97,15 @@ namespace CapstoneProject.Pages
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
-<<<<<<< HEAD
-        private int DrawGraph(List<Task> mainLevel) {
+
+        public int DrawGraph(List<Task> mainLevel) {
             int top = 50;
-            for (int i = 0; i < mainLevel.Count; i++) { 
+            for (int i = 0; i < mainLevel.Count; i++) {
                 int spaceUsed = DrawSubTasks(mainLevel[i], top);
                 top += (spaceUsed + 1) * (buttonHeight + buttonSpacing) + 50;
             }
 
             return top;
-=======
-        public void DrawGraph(List<Task> mainLevel) {
-            //TODO: Add support for multiple root nodes.
-            DrawCalendar(365);
-            int i = DrawSubTasks(mainLevel[0], 50);
->>>>>>> 019879c6ba75f35c252766c05c3f3043f6df1491
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
