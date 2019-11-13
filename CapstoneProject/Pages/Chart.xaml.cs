@@ -99,12 +99,18 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (10/15/2019)
 
         public int DrawGraph(List<Task> mainLevel) {
+            mainCanvas.Children.Clear();
+
             int top = 50;
             for (int i = 0; i < mainLevel.Count; i++) {
                 int spaceUsed = DrawSubTasks(mainLevel[i], top);
                 top += (spaceUsed + 1) * (buttonHeight + buttonSpacing) + 50;
             }
 
+
+            int screenHeight = top;
+            mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
+            DrawCalendar(365);
             return top;
         }
 
@@ -498,8 +504,7 @@ namespace CapstoneProject.Pages
             if (taskList.Count > 0)
                 screenHeight = DrawGraph(taskList);
 
-            mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
-            DrawCalendar(365);
+
         }
     }
 }
