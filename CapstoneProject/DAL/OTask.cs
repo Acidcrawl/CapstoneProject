@@ -40,9 +40,6 @@ namespace CapstoneProject.DAL {
             cmd.Parameters.AddWithValue("@mostlikelyduration", newTask.MostLikelyDuration);
             cmd.Parameters.AddWithValue("@starteddate", ((object)newTask.StartedDate) ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@completeddate", ((object)newTask.CompletedDate) ?? DBNull.Value);
-            //TODO: Make the dates real
-            cmd.Parameters.AddWithValue("@startDate", DateTime.Now);
-            cmd.Parameters.AddWithValue("@endDate", DateTime.Now);
             cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
             cmd.Parameters.AddWithValue("@status", newTask.Status);
             cmd.Parameters.AddWithValue("@ownerid", newTask.Owner.Id);
@@ -54,6 +51,21 @@ namespace CapstoneProject.DAL {
             //new ODependency().Insert(new Dependency());
             return effectedIds;
         }
+
+        public void UpdateRootNodeFlagOnAllTasks()
+        {
+            conn.Open();
+            string query = "UPDATE Task SET RootNode = 0 Where TaskId IN (SELECT depOnTaskId FROM dependency)";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            int effectedIds = cmd.ExecuteNonQuery();
+
+            query = "UPDATE Task SET RootNode = 1 Where TaskId NOT IN (SELECT TaskId FROM dependency)";
+            cmd = new SqlCommand(query, conn);
+            effectedIds = cmd.ExecuteNonQuery();
+
+            conn.Close();
+        }
+
         public int Delete(int taskId) {
             conn.Open();
             string query = "Delete from Task Where TaskId= " + taskId;
@@ -65,7 +77,7 @@ namespace CapstoneProject.DAL {
         public int Update(Task updatedTask) {
             conn.Open();
             //TODO: Do we need to add an @taskId parameter to the command?
-            string query = "update Task set Name = @name, Description=@description, MinEstDuration=@minduration, MaxEstDuration=@maxduration, MostLikelyEstDuration=@mostlikelyduration, EndDate=@enddate, ModifiedDate=@modifieddate, StatusId=@status, UserId=@ownerid, ProjectId=@projectid, RootNode=@rootnode Where TaskId=@taskid";
+            string query = "update Task set Name = @name, Description=@description, MinEstDuration=@minduration, MaxEstDuration=@maxduration, MostLikelyEstDuration=@mostlikelyduration,StartDate=@starteddate, EndDate=@completeddate, ModifiedDate=@modifieddate, StatusId=@status, UserId=@ownerid, ProjectId=@projectid, RootNode=@rootnode Where TaskId=@taskid";
             SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@taskid", updatedTask.Id);
             cmd.Parameters.AddWithValue("@name", updatedTask.Name);
@@ -73,10 +85,8 @@ namespace CapstoneProject.DAL {
             cmd.Parameters.AddWithValue("@minduration", updatedTask.MinDuration);
             cmd.Parameters.AddWithValue("@maxduration", updatedTask.MaxDuration);
             cmd.Parameters.AddWithValue("@mostlikelyduration", updatedTask.MostLikelyDuration);
+            cmd.Parameters.AddWithValue("@starteddate", ((object)updatedTask.StartedDate) ?? DBNull.Value);
             cmd.Parameters.AddWithValue("@completeddate", ((object)updatedTask.CompletedDate) ?? DBNull.Value);
-            //TODO: Make the dates real
-            cmd.Parameters.AddWithValue("@startDate", DateTime.Now);
-            cmd.Parameters.AddWithValue("@endDate", DateTime.Now);
             cmd.Parameters.AddWithValue("@modifieddate", DateTime.Now);
             cmd.Parameters.AddWithValue("@status", updatedTask.Status);
             cmd.Parameters.AddWithValue("@ownerid", updatedTask.Owner.Id);

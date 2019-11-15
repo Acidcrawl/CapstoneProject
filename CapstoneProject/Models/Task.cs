@@ -67,8 +67,14 @@ namespace CapstoneProject.Models {
                 foreach (Task task in DependentTasks)
                 {
                     oDependency.Insert(new Dependency(task.Id, this.Id));
-                }
 
+                    //If the task is a dependency now, make sure to remove the root node flag
+                    //if (task.RootNode == true)
+                    //{
+                    //    task.RootNode = false;
+                    //    task.save();
+                    //}
+                }
             } else {
                 oTask.Update(this);
 
@@ -79,8 +85,16 @@ namespace CapstoneProject.Models {
                 foreach (Task task in DependentTasks)
                 {
                     oDependency.Insert(new Dependency(task.Id, this.Id));
+
+                    //If the task is a dependency now, make sure to remove the root node flag
+                    if (task.RootNode == true)
+                    {
+                        task.RootNode = false;
+                        task.save();
+                    }
                 }
             }
+            oTask.UpdateRootNodeFlagOnAllTasks();
             return this;
         }
 

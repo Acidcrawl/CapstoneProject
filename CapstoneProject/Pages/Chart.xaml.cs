@@ -42,6 +42,7 @@ namespace CapstoneProject.Pages
         private Point previous;
         private int leftDateChange = -1;
         private int rightDateChange = -1;
+        private Brush taskBrush;
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
         private string duration = "";
@@ -120,17 +121,19 @@ namespace CapstoneProject.Pages
             double tempDuration = 0;
             if (duration == "" || duration == "minDuration")
             {
+                taskBrush = new SolidColorBrush(Colors.LightGray);
                 tempDuration = parent.MinDuration;
             }
             else if (duration == "maxDuration")
             {
+                taskBrush = new SolidColorBrush(Colors.Red);
                 tempDuration = parent.MaxDuration;
 
             }
             else if (duration == "mostLikelyDuration")
             {
+                taskBrush = new SolidColorBrush(Colors.Yellow);
                 tempDuration = parent.MostLikelyDuration;
-
             }
             double newTopMargin = topMargin;
             double minWidth = int.MaxValue;
@@ -164,6 +167,7 @@ namespace CapstoneProject.Pages
 
             //taskcontrol
             TaskControl t = new TaskControl(parent, this);
+            t.taskBorder.Background = taskBrush;
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
             Canvas.SetLeft(t, ((DateTime)parent.StartedDate - _project.StartDate).TotalDays * dayWidth);

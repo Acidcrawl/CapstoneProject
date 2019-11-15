@@ -90,7 +90,8 @@ namespace CapstoneProject {
                 Description = tbxTaskDescription.Text,
                 MinDuration = float.Parse(tbxMinDuration.Text),
                 MaxDuration = float.Parse(tbxMaxDuration.Text),
-                StartedDate = DateTime.Parse("1/5/2019"),
+                StartedDate = dtStartDate.SelectedDate,
+                CompletedDate = dtCompleteDate.SelectedDate,
                 Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex]
             };
 
@@ -117,6 +118,9 @@ namespace CapstoneProject {
                     break;
             }
 
+            if (task.DependentTasks.Count == 0)
+                task.RootNode = true;
+
             return task.save();
         }
 
@@ -127,6 +131,8 @@ namespace CapstoneProject {
             taskToEdit.Description = tbxTaskDescription.Text;
             taskToEdit.MinDuration = float.Parse(tbxMinDuration.Text);
             taskToEdit.MaxDuration = float.Parse(tbxMaxDuration.Text);
+            taskToEdit.StartedDate = dtStartDate.SelectedDate;
+            taskToEdit.CompletedDate = dtCompleteDate.SelectedDate;
             taskToEdit.Owner = (User)cmbOwner.SelectedItem;
 
             //Add dependent Tasks
@@ -228,6 +234,8 @@ namespace CapstoneProject {
                 cmbStatus.SelectedIndex = cmbStatus.Items.IndexOf(taskToEdit.Status);
                 cmbOwner.SelectedIndex = cmbOwner.Items.IndexOf(taskToEdit.Owner);
                 cmbTasks.SelectedItems = new ObservableCollection<object>(taskToEdit.DependentTasks);
+                dtStartDate.SelectedDate = taskToEdit.StartedDate;
+                dtCompleteDate.SelectedDate = taskToEdit.CompletedDate;
             }
         }
 
