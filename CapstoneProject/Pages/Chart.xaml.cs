@@ -42,6 +42,8 @@ namespace CapstoneProject.Pages
         private Point previous;
         private int leftDateChange = -1;
         private int rightDateChange = -1;
+        private int dayThreshold = 50;
+
         private Brush taskBrush;
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
@@ -187,36 +189,52 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (11/3/2019)
         private void progressResizeTask() {
             Task task = (Task)adjustingTask.DataContext;
-
+            // TODO: Check if date is decreased past parents start dated/after childs start date
+            // TODO: ?? Maybe increase started date of all child tasks if parent is increased past child start date.
+            // TODO: Update Tasks in database.
             double mouseX = Mouse.GetPosition(mainCanvas).X;
             double taskX = Canvas.GetLeft(adjustingTask);
 
-            double sign = Math.Sign(taskX + adjustingTask.Width - mouseX);
             if (rightDateChange != -1) {
-                adjustingTask.Width = sign + adjustingTask.Width;
-                adjustingTask.tbxTaskName.Text = taskX.ToString() + " + " + adjustingTask.Width.ToString() + " - " + mouseX;
+                if (Math.Abs(mouseX - previous.X) > dayThreshold) {
+                    int direction = Math.Sign(mouseX - previous.X);
+                    previous = Mouse.GetPosition(mainCanvas);
+
+                    task.MinDuration += direction;
+                    DrawGraph(taskList);
+                }
+            } else if(leftDateChange != -1) {
+                if (Math.Abs(mouseX - previous.X) > dayThreshold) {
+                    int direction = Math.Sign(mouseX - previous.X);
+                    previous = Mouse.GetPosition(mainCanvas);
+
+                    task.StartedDate = ((DateTime)task.StartedDate).AddDays(direction);
+                    task.MinDuration += -direction;
+                    DrawGraph(taskList);
+                }
             }
         }
 
         // Created by Sandro Pawlidis (11/3/2019)
         private void resizeTask(object sender, RoutedEventArgs e) {
-            //TaskControl t = (TaskControl)sender;
-            //Task task = (Task)t.DataContext;
+            TaskControl t = (TaskControl)sender;
+            Task task = (Task)t.DataContext;
 
-            //double mouseX = Mouse.GetPosition(mainCanvas).X;
-            //double taskX = Canvas.GetLeft(t);
+            double mouseX = Mouse.GetPosition(mainCanvas).X;
+            double taskX = Canvas.GetLeft(t);
 
-            //double mouseOnTask = mouseX - taskX;
+            double mouseOnTask = mouseX - taskX;
+            previous = Mouse.GetPosition(mainCanvas);
 
-            //if (mouseOnTask < t.Width * 0.05) {
-            //    leftDateChange = -1;
-            //    adjustingTask = t;
-            //}
+            if (mouseOnTask < t.Width * 0.05) {
+                leftDateChange = 0;
+                adjustingTask = t;
+            }
 
-            //else if (mouseOnTask > t.Width * 0.95) {
-            //    rightDateChange = 0;
-            //    adjustingTask = t;
-            //}
+            else if (mouseOnTask > t.Width * 0.95) {
+                rightDateChange = 0;
+                adjustingTask = t;
+            }
 
         }
 
