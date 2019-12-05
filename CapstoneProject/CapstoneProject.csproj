@@ -91,6 +91,7 @@
       <DependentUpon>ProjectProperties.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskToolTip.cs" />
+    <Compile Include="Validators\EmptyRule.cs" />
     <Compile Include="Windows\frmDescription.xaml.cs">
       <DependentUpon>frmDescription.xaml</DependentUpon>
     </Compile>

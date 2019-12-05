@@ -29,10 +29,13 @@ namespace CapstoneProject.Pages {
 
         public enum Mode { INSERT = 0, UPDATE = 1 }
 
+        public string TextProp { get; set; }
+
         public ProjectProperties(Mode mode, Project project) {
             _mode = mode;
             this.project = project;
             InitializeComponent();
+            this.DataContext = this;
         }
 
         public void numberValidation(object sender, TextCompositionEventArgs e) {
@@ -112,6 +115,28 @@ namespace CapstoneProject.Pages {
                 Window.GetWindow(this).WindowState = prevWindowState;
                 Window.GetWindow(this).KeyDown -= Page_KeyDown;
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void TbxName_LostFocus(object sender, RoutedEventArgs e)
+        {
+            tbxName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        private void TbxDescription_LostFocus(object sender, RoutedEventArgs e)
+        {
+            tbxDescription.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        private void DpStartDate_LostFocus(object sender, RoutedEventArgs e)
+        {
+            String blah = dpStartDate.Text;
+            BindingExpression bp = dpStartDate.GetBindingExpression(DatePicker.TextProperty);
+            bp.UpdateSource();
         }
     }
 }
