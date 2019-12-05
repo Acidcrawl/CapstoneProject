@@ -48,6 +48,8 @@ namespace CapstoneProject.Pages
 
         private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
         private string duration = "";
+        WindowState prevWindowState = new WindowState();
+
         public Chart(Project project) {
             InitializeComponent();
 
@@ -57,7 +59,7 @@ namespace CapstoneProject.Pages
             this.MouseUp += ReleaseMouseDrag;
 
             addItemsHashTable();
-           // addItemsCombo();
+            // addItemsCombo();
         }
         public Chart(Project project,string _duration)
         {
@@ -100,21 +102,33 @@ namespace CapstoneProject.Pages
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
-
         public int DrawGraph(List<Task> mainLevel) {
             mainCanvas.Children.Clear();
-
             int top = 50;
-            for (int i = 0; i < mainLevel.Count; i++) {
-                int spaceUsed = DrawSubTasks(mainLevel[i], top);
-                top += (spaceUsed + 1) * (buttonHeight + buttonSpacing) + 50;
+            //Only try to draw the tasks if there are some to draw;
+            if (mainLevel.Count > 0)
+            {
+                for (int i = 0; i < mainLevel.Count; i++)
+                {
+                    int spaceUsed = DrawSubTasks(mainLevel[i], top);
+                    top += (spaceUsed + 1) * (buttonHeight + buttonSpacing) + 50;
+                }
+
+
+                int screenHeight = top;
+                mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
+                DrawCalendar(365);
             }
-
-
-            int screenHeight = top;
-            mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
-            DrawCalendar(365);
+            else
+            {
+                DrawCalendar(365);
+            }
             return top;
+        }
+
+        public void RefreshGraph()
+        {
+            DrawGraph(GetTasksAndDependanciesFromDatabase());
         }
 
         // Created by Sandro Pawlidis (10/15/2019)
@@ -378,10 +392,6 @@ namespace CapstoneProject.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            //Canvas.SetTop(taskGrid, 30);
-            //Canvas.SetLeft(taskGrid, rectVal.X);
-            //mainCanvas.Children.Add(taskGrid);
-
             TaskControl taskControl = new TaskControl(task, this);
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
@@ -431,23 +441,15 @@ namespace CapstoneProject.Pages
         // Created by Sandro Pawlidis (9/25/2019)
         private void DragCanvas(object sender, RoutedEventArgs e)
         {
-
             if (leftDateChange != -1 || rightDateChange != -1) {            
                 progressResizeTask();
                 return;
             }
-
-            //if (!translating) return;
-
-            //Point currentMousePos = Mouse.GetPosition(mainCanvas);
-            //move.X += currentMousePos.X - savedMousePosition.X;
-            //move.Y += currentMousePos.Y - savedMousePosition.Y;
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
         private void SetMouseDrag(object sender, RoutedEventArgs e)
         {
-            //translating = true;
             savedMousePosition = Mouse.GetPosition(mainCanvas);
         }
 
@@ -487,25 +489,8 @@ namespace CapstoneProject.Pages
         private void scrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-            //scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + e.Delta);
         }
 
-        //Added this to handle resizing of the calendar - Chase Torres (9/26/2019)
-        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //mainCanvas.Children.Clear();
-            //DrawCalendar(365);
-        }
-
-        //Adds months to the combo box - Chase Torres (9/26/2019)
-        //private void addItemsCombo()
-        //{
-        //    foreach (KeyValuePair<string, int> keyEntry in dayMonths)
-        //    {
-        //        comboBoxMonths.Items.Add(keyEntry.Key);
-        //    }
-        //    comboBoxMonths.SelectedIndex = 0;
-        //}
 
         // Adds the months and days to the dictionary - Chase Torres (9/26/2019)
         private void addItemsHashTable()
@@ -524,20 +509,6 @@ namespace CapstoneProject.Pages
             dayMonths.Add("December", 31);
         }
 
-        //Redraws the calendar based off the month selected - Chase Torres(9/26/2019)
-        //Modified this to move the scrollbar to the start of the selected month. - Chase Torres(10/7/2019)
-        //private void ComboBoxMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    double monthPosition = 0;
-        //    double totalDays = 0;
-        //    for (int i = 0; i < dayMonths.Keys.ToList().IndexOf((string)comboBoxMonths.SelectedItem); i++)
-        //    {
-        //        totalDays += dayMonths.Values.ElementAt(i);
-        //    }
-        //    monthPosition = totalDays * dayWidth;
-        //    scrollViewer.ScrollToHorizontalOffset(monthPosition);
-        //}
-
         //Going to try to use a groupbox as the container to add tasks to the canvas
         private void addGroupBoxCanvas()
         {
@@ -547,6 +518,7 @@ namespace CapstoneProject.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            prevWindowState = Window.GetWindow(this).WindowState;
             Window.GetWindow(this).WindowState = WindowState.Maximized;
 
             SetupCanvas();
@@ -556,10 +528,19 @@ namespace CapstoneProject.Pages
 
             int screenHeight = 0;
 
-            if (taskList.Count > 0)
-                screenHeight = DrawGraph(taskList);
+            screenHeight = DrawGraph(taskList);
 
+            Window.GetWindow(this).KeyDown += Page_KeyDown;
+        }
 
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                NavigationService.GoBack();
+                Window.GetWindow(this).WindowState = prevWindowState;
+                Window.GetWindow(this).KeyDown -= Page_KeyDown;
+            }
         }
     }
 }

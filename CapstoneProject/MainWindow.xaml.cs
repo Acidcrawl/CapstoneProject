@@ -1,6 +1,5 @@
 ﻿using CapstoneProject.Models;
 using CapstoneProject.Pages;
-using CapstoneProject.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,13 +40,6 @@ namespace CapstoneProject
             Close();
         }
 
-        private void BtnChart_Click(object sender, RoutedEventArgs e)
-        {
-            Window window = new frmPERTChart();
-            this.Close();
-            window.ShowDialog();
-        }
-
         //By Levi Delezene
         private void mi_projectProperties_Click(object sender, RoutedEventArgs e)
         {
@@ -67,12 +59,6 @@ namespace CapstoneProject
             e.Handled = new Regex("[^0-9.]+").IsMatch(e.Text);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Window window = new frmPERTChart();
-            this.Close();
-            window.ShowDialog();
-        }
         /// <summary>
         /// Shows minimum duration subtasks---By Alankar Pokhrel
         /// </summary>

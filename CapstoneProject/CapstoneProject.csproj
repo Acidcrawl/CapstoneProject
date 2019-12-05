@@ -92,17 +92,11 @@
     </Compile>
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="Validators\EmptyRule.cs" />
-    <Compile Include="Windows\frmDescription.xaml.cs">
-      <DependentUpon>frmDescription.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GraphController.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\Task.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Windows\frmTest.xaml.cs">
-      <DependentUpon>frmTest.xaml</DependentUpon>
-    </Compile>
     <Page Include="Controls\MultiSelectComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,14 +125,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\frmDescription.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\frmPERTChart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -150,17 +136,10 @@
     <Compile Include="Windows\frmTask.xaml.cs">
       <DependentUpon>frmTask.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\frmPERTChart.xaml.cs">
-      <DependentUpon>frmPERTChart.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\frmTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

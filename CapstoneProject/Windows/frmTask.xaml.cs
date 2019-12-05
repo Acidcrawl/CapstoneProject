@@ -68,6 +68,11 @@ namespace CapstoneProject {
                 tbxMaxDuration.BorderBrush = Brushes.Red;
                 ret = false;
             }
+            if (tbxMostLikelyDuration.Text == null || tbxMostLikelyDuration.Text == "")
+            {
+                tbxMostLikelyDuration.BorderBrush = Brushes.Red;
+                ret = false;
+            }
             if (cmbOwner.SelectedIndex < 0) {
                 cmbOwner.BorderBrush = Brushes.Red;
                 ret = false;
@@ -90,6 +95,7 @@ namespace CapstoneProject {
                 Description = tbxTaskDescription.Text,
                 MinDuration = float.Parse(tbxMinDuration.Text),
                 MaxDuration = float.Parse(tbxMaxDuration.Text),
+                MostLikelyDuration = float.Parse(tbxMostLikelyDuration.Text),
                 StartedDate = dtStartDate.SelectedDate,
                 CompletedDate = dtCompleteDate.SelectedDate,
                 Owner = (User)cmbOwner.Items[cmbOwner.SelectedIndex]
@@ -131,6 +137,7 @@ namespace CapstoneProject {
             taskToEdit.Description = tbxTaskDescription.Text;
             taskToEdit.MinDuration = float.Parse(tbxMinDuration.Text);
             taskToEdit.MaxDuration = float.Parse(tbxMaxDuration.Text);
+            taskToEdit.MostLikelyDuration = float.Parse(tbxMostLikelyDuration.Text);
             taskToEdit.StartedDate = dtStartDate.SelectedDate;
             taskToEdit.CompletedDate = dtCompleteDate.SelectedDate;
             taskToEdit.Owner = (User)cmbOwner.SelectedItem;
@@ -231,6 +238,7 @@ namespace CapstoneProject {
                 tbxTaskDescription.Text = taskToEdit.Description;
                 tbxMaxDuration.Text = taskToEdit.MaxDuration.ToString();
                 tbxMinDuration.Text = taskToEdit.MinDuration.ToString();
+                tbxMostLikelyDuration.Text = taskToEdit.MostLikelyDuration.ToString();
                 cmbStatus.SelectedIndex = cmbStatus.Items.IndexOf(taskToEdit.Status);
                 cmbOwner.SelectedIndex = cmbOwner.Items.IndexOf(taskToEdit.Owner);
                 cmbTasks.SelectedItems = new ObservableCollection<object>(taskToEdit.DependentTasks);

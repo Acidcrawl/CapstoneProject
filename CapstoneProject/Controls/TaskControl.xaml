@@ -28,9 +28,8 @@
 
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem x:Name="mi_taskDetails" Header="Details" HorizontalAlignment="Left" Height="20" Width="Auto"/>
                         <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click"/>
-                        <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto"/>
+                        <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_deleteTask_Click"/>
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>

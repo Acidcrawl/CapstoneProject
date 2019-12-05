@@ -13,7 +13,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using CapstoneProject.Models;
-using CapstoneProject.Windows;
 using CapstoneProject.DAL;
 using CapstoneProject.Pages;
 
@@ -37,7 +36,24 @@ namespace CapstoneProject.Controls {
         private void mi_editTask_Click(object sender, RoutedEventArgs e) {
             Task task = (Task)((MenuItem)sender).DataContext;
             new frmTask(_chart, task).ShowDialog();
+
+            _chart.RefreshGraph();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
+        }
+
+        private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
+        {
+            Task task = (Task)((MenuItem)sender).DataContext;
+
+            //First delete dependencies
+            ODependency oDependency = new ODependency();
+            oDependency.DeleteAllTaskDependencies(task.Id);
+
+            OTask dbTask = new OTask();
+            dbTask.Delete(task.Id);
+
+            _chart.RefreshGraph();
+            
         }
     }
 }

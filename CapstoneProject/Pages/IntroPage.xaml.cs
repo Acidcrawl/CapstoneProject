@@ -35,7 +35,6 @@ namespace CapstoneProject.Pages
             {
                 parent.project = (Project)cboProject.Items[cboProject.SelectedIndex];
                 NavigationService.Navigate(new Chart((Project)cboProject.Items[cboProject.SelectedIndex]));
-                parent.mi_saveProject.IsEnabled = true;
                 parent.mi_projectProperties.IsEnabled = true;
             }
         }

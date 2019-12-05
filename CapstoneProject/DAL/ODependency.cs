@@ -50,6 +50,17 @@ namespace CapstoneProject.DAL
             return effectedIds;
         }
 
+        public int DeleteAllTaskDependencies(int taskId)
+        {
+            conn.Open();
+            string query = "Delete from Dependency Where TaskId=@taskid or DepOnTaskId=@taskid";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@taskid", taskId);
+            int effectedIds = cmd.ExecuteNonQuery();
+            conn.Close();
+            return effectedIds;
+        }
+
         public int Update(Dependency updatedDependency)
         {
             conn.Open();

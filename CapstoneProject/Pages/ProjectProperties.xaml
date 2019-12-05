@@ -10,6 +10,12 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Project Properties" Height="389.773" Width="654.545" KeyDown="Page_KeyDown" Loaded="Page_Loaded">
 
+    <Page.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Save"
+                        Executed="SaveCmdExecuted"
+                        CanExecute="SaveCmdCanExecute"/>
+    </Page.CommandBindings>
+    
     <Page.Resources>
         <ControlTemplate x:Key="ValidationTemplate">
             <DockPanel>
@@ -19,6 +25,16 @@
         </ControlTemplate>
 
         <Style x:Key="TextBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                              Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ComboBoxInError" TargetType="{x:Type ComboBox}">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="true">
                     <Setter Property="ToolTip"
@@ -38,6 +54,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
     </Page.Resources>
     
     <Grid Loaded="Grid_Loaded">
@@ -51,7 +68,7 @@
                  VerticalAlignment="Top" 
                  Width="277" LostFocus="TbxName_LostFocus">
             <TextBox.Text>
-                <Binding Path="TextProp" UpdateSourceTrigger="Explicit">
+                <Binding Path="TextProp" ValidatesOnExceptions="True" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
                     <Binding.ValidationRules>
                         <Filters:EmptyRule/>
                     </Binding.ValidationRules>
@@ -70,7 +87,7 @@
                  VerticalAlignment="Top" 
                  Width="277" LostFocus="TbxDescription_LostFocus">
             <TextBox.Text>
-                <Binding Path="TextProp" UpdateSourceTrigger="Explicit">
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
                     <Binding.ValidationRules>
                         <Filters:EmptyRule/>
                     </Binding.ValidationRules>
@@ -86,21 +103,53 @@
                     Margin="231,184,0,0" 
                     VerticalAlignment="Top" 
                     Width="277" LostFocus="DpStartDate_LostFocus">
-            <DatePicker.Text>
-                <Binding Path="TextProp" UpdateSourceTrigger="Explicit">
+            <DatePicker.SelectedDate>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
                     <Binding.ValidationRules>
                         <Filters:EmptyRule/>
                     </Binding.ValidationRules>
                 </Binding>
-            </DatePicker.Text>
+            </DatePicker.SelectedDate>
         </DatePicker>
 
         <Label Content="Working Hours" HorizontalAlignment="Left" Margin="127,214,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxWorkingHours" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="231,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="277"/>
+        <TextBox x:Name="tbxWorkingHours"
+                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                 Style="{StaticResource TextBoxInError}"
+                 PreviewTextInput="numberValidation" 
+                 HorizontalAlignment="Left" 
+                 Height="23" 
+                 Margin="231,217,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="277" 
+                 LostFocus="tbxWorkingHours_LostFocus">
+            <TextBox.Text>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
 
-        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="231,311,0,0" VerticalAlignment="Top" Width="277" Click="btnSubmit_Click"/>
-        <ComboBox x:Name="cboOwner" HorizontalAlignment="Left" Margin="231,256,0,0" VerticalAlignment="Top" Width="277"/>
         <Label Content="Owner" HorizontalAlignment="Left" Margin="172,252,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cboOwner" 
+                  HorizontalAlignment="Left" 
+                  Margin="231,256,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="277"
+                  LostFocus="cboOwner_LostFocus">
+            <ComboBox.Text>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.Text>
+        </ComboBox>
+        
+        <Button x:Name="btnSubmit" Command="ApplicationCommands.Save" Content="Submit" IsDefault="True" HorizontalAlignment="Left" Margin="231,311,0,0" VerticalAlignment="Top" Width="277" Click="btnSubmit_Click"/>
 
 
     </Grid>

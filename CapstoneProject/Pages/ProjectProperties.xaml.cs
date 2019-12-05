@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,8 @@ namespace CapstoneProject.Pages {
     /// </summary>
     
     //By Levi Delezene
-    public partial class ProjectProperties : Page {
+    public partial class ProjectProperties : Page
+    {
         Project project;
         Mode _mode;
         OProject projectDAL = new OProject();
@@ -42,8 +44,9 @@ namespace CapstoneProject.Pages {
             MainWindow.numberValidation(sender, e);
         }
 
-        private void btnSubmit_Click(object sender, RoutedEventArgs e) {
-            try {
+        private void Save() {
+            try
+            {
                 project = createProject();
                 if (_mode == Mode.INSERT)
                     NavigationService.Navigate(new Chart(project));
@@ -53,9 +56,12 @@ namespace CapstoneProject.Pages {
                     Window.GetWindow(this).KeyDown -= Page_KeyDown;
                     NavigationService.GoBack();
                 }
-            } catch (Exception excep) {
+            }
+            catch (Exception excep)
+            {
                 MessageBox.Show(excep.ToString());
             }
+
         }
 
         private Project createProject() {
@@ -134,9 +140,46 @@ namespace CapstoneProject.Pages {
 
         private void DpStartDate_LostFocus(object sender, RoutedEventArgs e)
         {
-            String blah = dpStartDate.Text;
-            BindingExpression bp = dpStartDate.GetBindingExpression(DatePicker.TextProperty);
-            bp.UpdateSource();
+            dpStartDate.GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
+        }
+
+        private void tbxWorkingHours_LostFocus(object sender, RoutedEventArgs e)
+        {
+            tbxWorkingHours.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        private void SaveCmdExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Save();
+        }
+
+        private void SaveCmdCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = IsValid(sender as DependencyObject);
+        }
+
+        private bool IsValid(DependencyObject obj)
+        {
+            // The dependency object is valid if it has no errors and all
+            // of its children (that are dependency objects) are error-free.
+            return !Validation.GetHasError(obj) &&
+            LogicalTreeHelper.GetChildren(obj)
+            .OfType<DependencyObject>()
+            .All(IsValid);
+        }
+
+        private void btnSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            tbxName.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            tbxDescription.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            dpStartDate.GetBindingExpression(DatePicker.SelectedDateProperty).UpdateSource();
+            tbxWorkingHours.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            cboOwner.GetBindingExpression(ComboBox.TextProperty).UpdateSource();
+        }
+
+        private void cboOwner_LostFocus(object sender, RoutedEventArgs e)
+        {
+            cboOwner.GetBindingExpression(ComboBox.TextProperty).UpdateSource();
         }
     }
 }

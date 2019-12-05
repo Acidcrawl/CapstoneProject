@@ -8,9 +8,9 @@
       xmlns:CapstoneProject="clr-namespace:CapstoneProject" x:Class="CapstoneProject.Pages.Chart"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Chart" Loaded="Page_Loaded">
+      Title="Chart" Loaded="Page_Loaded" KeyDown="Page_KeyDown">
 
-    <Grid x:Name="mainGrid"  SizeChanged="Grid_SizeChanged">
+    <Grid x:Name="mainGrid">
         <ScrollViewer x:Name="scrollViewer" HorizontalContentAlignment="Left" VerticalContentAlignment="top" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="scrollViewer_PreviewMouseWheel">
             <Canvas x:Name="mainCanvas" Background="Transparent" Margin="10,0,10,30">
                 <Canvas.ContextMenu>
@@ -18,23 +18,7 @@
                         <MenuItem x:Name="mi_addTask" Header="Add Task" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_addTask_Click"/>
                     </ContextMenu>
                 </Canvas.ContextMenu>
-                <!--<Button x:Name="rectTest" Content="I'm an example task. Right click me"  Height="65" Canvas.Left="259" Canvas.Top="129" Width="227">
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem x:Name="mi_addTask_rightClick" Header="Add Task" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_addTask_Click"/>
-                            <MenuItem x:Name="mi_editTask_rightClick" Header="Edit Task" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click" />
-                            <MenuItem x:Name="mi_deleteTask_rightClick" Header="Delete Task" HorizontalAlignment="Left" Height="20" Width="auto"/>
-                        </ContextMenu>
-                    </Button.ContextMenu>
-                </Button>-->
-
             </Canvas>
         </ScrollViewer>
-
-        <!--<ComboBox x:Name="comboBoxMonths" VerticalAlignment="Top" Height="35" SelectionChanged="ComboBoxMonths_SelectionChanged"/>-->
-        
-        <!--
-        <ScrollBar x:Name="scrollBar" Width="Auto" Margin="0,416,0,0" Height="34" VerticalAlignment="Top"/>
-        /-->
     </Grid>
 </Page>
