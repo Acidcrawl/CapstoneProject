@@ -160,6 +160,11 @@ namespace CapstoneProject.Pages
 
                 Path p = getPath(points);
 
+                KeyValuePair<Task, Task> pair = new KeyValuePair<Task, Task>(parent, parent.DependentTasks[i]);               
+                p.DataContext = pair;
+
+                Button button = new Button();
+
                 Canvas.SetZIndex(p, 99);
                 mainCanvas.Children.Add(p);
 
@@ -257,7 +262,7 @@ namespace CapstoneProject.Pages
         private Path getPath(List<Point> points) {
             Path path = new Path();
             path.Stroke = Brushes.Black;
-            path.StrokeThickness = 1;
+            path.StrokeThickness = 2;
 
             PathSegmentCollection segments = new PathSegmentCollection();
             for (int i = 1; i < points.Count; i++)
@@ -272,11 +277,39 @@ namespace CapstoneProject.Pages
                 }
             };
 
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = "Remove dependency";
+            menuItem.Click += mi_deleteDependency_Click;
+            menuItem.DataContext = path;
+
+            ContextMenu menu = new ContextMenu();
+            menu.Items.Add(menuItem);        
+            path.ContextMenu = menu;
+
             return path;
         }
 
 
         public Project Project { get => _project; set => _project = value; }
+
+        /// <summary>
+        /// Deletes a dependency
+        /// Written by Levi Delezene
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mi_deleteDependency_Click(object sender, RoutedEventArgs e) {
+            Path path = (Path)((MenuItem)sender).DataContext;
+            KeyValuePair<Task, Task> pair = (KeyValuePair<Task,Task>)path.DataContext;
+            //Look at all tasks and remove this task^ from the one it's dependent on???
+            Task parent = pair.Key;
+            Task child = pair.Value;
+            parent.DependentTasks.Remove(child);
+            parent.save();
+
+            mainCanvas.Children.Remove(path);
+            DrawGraph(GetTasksAndDependanciesFromDatabase());
+        }
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
