@@ -535,11 +535,15 @@ namespace CapstoneProject.Pages
 
         private void Page_KeyDown(object sender, KeyEventArgs e)
         {
+           
             if (e.Key == Key.Escape)
             {
-                NavigationService.GoBack();
-                Window.GetWindow(this).WindowState = prevWindowState;
-                Window.GetWindow(this).KeyDown -= Page_KeyDown;
+                if (NavigationService.CanGoBack)
+                {
+                    NavigationService.GoBack();
+                    Window.GetWindow(this).WindowState = prevWindowState;
+                    Window.GetWindow(this).KeyDown -= Page_KeyDown;
+                }
             }
         }
     }
